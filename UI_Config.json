@@ -1,0 +1,50 @@
+{
+  "readMeFile": {
+    "type": "button",
+    "label": "ReadMe",
+    "tooltip": "",
+    "function": "OpenReadMe",
+    "wsevent": "",
+    "group": ""
+  },
+  "openGUI": {
+    "type": "button",
+    "label": "Open Dashboard",
+    "tooltip": "",
+    "function": "OpenGUI",
+    "wsevent": "",
+    "group": ""
+  },
+  "supportBtn": {
+    "type": "button",
+    "label": "Online Support",
+    "function": "OpenDiscord",
+    "wsevent": "",
+    "tooltip": "Need help online?\nJoin von_Schappler's Discord Server",
+    "group": "Support:"
+  },
+  "websiteBtn": {
+    "type": "button",
+    "label": "von Schappler's Site",
+    "function": "OpenSite",
+    "wsevent": "",
+    "tooltip": "",
+    "group": "Support:"
+  },
+  "twitchBtn": {
+    "type": "button",
+    "label": "von Schappler's Twitch",
+    "function": "OpenTwitch",
+    "wsevent": "",
+    "tooltip": "",
+    "group": "Support:"
+  },
+  "donateBtn": {
+    "type": "button",
+    "label": "Donate this project",
+    "function": "OpenDonation",
+    "wsevent": "",
+    "tooltip": "If you feel inclined to send a tip, click this!",
+    "group": "Support:"
+  }
+}

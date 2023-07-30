@@ -1,0 +1,17 @@
+﻿{
+  "dbColumns": [
+    "sndListTrigger", 
+    "sndTrigger", 
+    "sndFilePath", 
+    "sndVolume", 
+    "sndSendMsg", 
+    "sndSendAs", 
+    "sndEnable", 
+    "sndUsesCount", 
+    "passIntegrity", 
+    "integrityFixed"
+  ], 
+  "dbTable": "soundsSettings", 
+  "dbFolder": "SLCB_SendSounds_Database", 
+  "dbFileName": "SLCB_SendSounds_database.sqlite"
+}

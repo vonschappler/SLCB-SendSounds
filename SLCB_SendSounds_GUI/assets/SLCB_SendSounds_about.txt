@@ -1,0 +1,70 @@
+# Overview:
+
+    1. Used programming languages and frameworks:
+
+        + Main script:
+            - Python 2.7.13
+
+        + Graphical User Interface (GUI):
+            - Python 2.7.13
+            - Tkinter (python framework for GUI design)
+        
+    2. Requirements:
+
+        + StreamlabsChatbot 1.02.78 (or above)
+        
+        + Python 2.7.13
+
+        + Operational System(s):
+            - Windows 10 (or above)
+        
+        + Streaming platform:
+            - Twitch (100% tested)
+        
+        + Python packages / dependencies:
+            - mutagen 1.43.1 (required)
+            - pygame 2.0.3 (optional)
+        
+    3. Basic funcionalities:
+
+        + Creates automatic "sound effects commands", by making use of the original sound file (located in a defined folder) and a custom command trigger
+        
+        + Adds usage counts of sounds, making it possible to view in the dashboard how many times each sound was used
+
+        + Sends the sound effects to an overlay, "fax-enabling" the use of multiple audio channels inside Streamlabs Chatbot
+        
+        + Uses sqlite3 databases instead of json, to improve command execution command speed
+        
+        + Provides a group of additional commands to be used with the script
+
+============================================================================================================
+
+# Known issues / TODOs for future releases:
+
+    Below there is a list of known issues. Some of those isses are not script related and cannot be fixed.
+    Future patches of this script and dashboard application will provide fixes to issues realated ONLY to
+    script coding.
+
+    - TODOs:
+        + Find a way to make the database run faster when there are too many files / information stored on it
+          It was verified that if too many files need to be added to the database or there are too many entries there, loading time of the script and dashboard can get slow
+
+        + Add an option to delete entries from the database, in case those are not wanted anymore
+          Currently, after some tests, deleting entries causes them to be re-inserted in the database whenever the script settings were saved.
+
+    - Issues:
+        + GUI start / update progress may be slow if too many files are added in the database
+        
+        + OBS may break the sounds randomly
+            - The reason for this is still being investigated to be sure this is being caused by the script and not by OBS itself.
+
+============================================================================================================
+
+# Changelog:
+
+    1. Beta Releases:
+
+        + [SLCB] SendSounds beta-1.0.0:
+            - Initial release for testing
+
+       
