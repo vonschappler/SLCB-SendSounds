@@ -59,7 +59,7 @@ A full guide on how to use the script can be found [this wiki](https://github.co
 
 ## Changelog:
 
-- [Version 1.0.0](#):
+- [Version beta-1.0.0](https://github.com/vonschappler/SLCB-SendSounds/releases/tag/beta-1.0.0):
   - First version launched
 
 ## Additional information:
