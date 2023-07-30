@@ -2,7 +2,7 @@
 
 ## Introduction:
 
-This is a Streamlabs Chatbot script mabe by request, created to play sound files to an overlay, simulating a "faux-virtual audio channel" to be added and controlled on OBS, making it possible to sed those files sent to a specific track.
+This is a Streamlabs Chatbot script mabe by request, created to play sound files to an overlay, simulating a "faux-audio channel" to be added and controlled on **OBS Studio**, making it possible to send those files sent to a specific track within **OBS**.
 
 ## Features:
 
