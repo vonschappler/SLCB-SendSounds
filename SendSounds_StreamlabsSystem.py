@@ -279,8 +279,14 @@ def GetList():
 
 
 def OpenReadMe():
-    location = 'https://github.com/vonschappler/SLCB-SendSounds/wiki'
-    os.startfile(location)
+    ReadMe = 'https://github.com/vonschappler/SLCB-SendSounds#readme'
+    os.startfile(ReadMe)
+    return
+
+
+def OpenUserGuide():
+    Guide = 'https://github.com/vonschappler/SLCB-SendSounds/wiki/User-Guide'
+    os.startfile(Guide)
     return
 
 

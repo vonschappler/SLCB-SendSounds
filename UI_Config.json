@@ -7,6 +7,14 @@
     "wsevent": "",
     "group": ""
   },
+  "openUserGuie": {
+    "type": "button",
+    "label": "OPen User Guide",
+    "tooltip": "",
+    "function": "OpenUserGuide",
+    "wsevent": "",
+    "group": ""
+  },
   "openGUI": {
     "type": "button",
     "label": "Open Dashboard",
