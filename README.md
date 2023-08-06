@@ -59,6 +59,12 @@ A full guide on how to use the script can be found [this wiki](https://github.co
 
 ## Changelog:
 
+- [Version beta-1.1.0](https://github.com/vonschappler/SLCB-SendSounds/releases/tag/beta-1.1.0):
+  - Fixed an issue where the script could conflict with other scripts which make reference to a sqlite database
+  - Added the buttons:
+    - Open User Guide
+    - Check fo Updates
+
 - [Version beta-1.0.0](https://github.com/vonschappler/SLCB-SendSounds/releases/tag/beta-1.0.0):
   - First version launched
 
