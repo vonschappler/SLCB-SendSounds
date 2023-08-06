@@ -1,1 +1,62 @@
-[{"Command":"!soundsdb","Permission":"Caster","Info":"","Group":"[SLCB] - SENDSOUNDS","Response":"$desc(Use this command to open the dashboard control of the script [SCB] SendSounds)\r\n$sendsounds(opendb)","Cooldown":0,"UserCooldown":0,"Cost":0,"Count":0,"Usage":"A","Enabled":true,"SoundFile":"","FKSoundFile":null},{"Command":"!soundsrld","Permission":"Caster","Info":"","Group":"[SLCB] - SENDSOUNDS","Response":"$desc(Use this command to reload settings and sounds database used by the script [SCB] SendSounds)\r\n$sendsounds(reload)","Cooldown":0,"UserCooldown":0,"Cost":0,"Count":0,"Usage":"A","Enabled":true,"SoundFile":"","FKSoundFile":null},{"Command":"!soundstest","Permission":"Caster","Info":"","Group":"[SLCB] - SENDSOUNDS","Response":"$desc(Use this command to test any of the sounds added to the database used by script [SCB] SendSounds after refreshing the script settings and sounds database)\r\n$sendsounds(play $dummyormsg)","Cooldown":0,"UserCooldown":0,"Cost":0,"Count":0,"Usage":"A","Enabled":true,"SoundFile":"","FKSoundFile":null},{"Command":"!soundslist","Permission":"Everyone","Info":"","Group":"[SLCB] - SENDSOUNDS","Response":"$desc(Use this command to open list all sound effects added to the script [SCB] SendSounds)\r\n$sendsounds(list)","Cooldown":1,"UserCooldown":5,"Cost":0,"Count":0,"Usage":"A","Enabled":true,"SoundFile":"","FKSoundFile":null}]
+[
+  {
+    "Command": "!soundsdb",
+    "Permission": "Caster",
+    "Info": "",
+    "Group": "[SLCB] - SENDSOUNDS",
+    "Response": "$desc(Use this command to open the dashboard control of the script [SCB] SendSounds)\r\n$sendsounds(opendb)",
+    "Cooldown": 0,
+    "UserCooldown": 0,
+    "Cost": 0,
+    "Count": 0,
+    "Usage": "A",
+    "Enabled": true,
+    "SoundFile": "",
+    "FKSoundFile": null
+  },
+  {
+    "Command": "!soundsrld",
+    "Permission": "Caster",
+    "Info": "",
+    "Group": "[SLCB] - SENDSOUNDS",
+    "Response": "$desc(Use this command to reload settings and sounds database used by the script [SCB] SendSounds)\r\n$sendsounds(reload)",
+    "Cooldown": 0,
+    "UserCooldown": 0,
+    "Cost": 0,
+    "Count": 0,
+    "Usage": "A",
+    "Enabled": true,
+    "SoundFile": "",
+    "FKSoundFile": null
+  },
+  {
+    "Command": "!soundstest",
+    "Permission": "Caster",
+    "Info": "",
+    "Group": "[SLCB] - SENDSOUNDS",
+    "Response": "$desc(Use this command to test any of the sounds added to the database used by script [SCB] SendSounds after refreshing the script settings and sounds database)\r\n$sendsounds(play $dummyormsg)",
+    "Cooldown": 0,
+    "UserCooldown": 0,
+    "Cost": 0,
+    "Count": 0,
+    "Usage": "A",
+    "Enabled": true,
+    "SoundFile": "",
+    "FKSoundFile": null
+  },
+  {
+    "Command": "!soundslist",
+    "Permission": "Everyone",
+    "Info": "",
+    "Group": "[SLCB] - SENDSOUNDS",
+    "Response": "$desc(Use this command to open list all sound effects added to the script [SCB] SendSounds)\r\n$sendsounds(list)",
+    "Cooldown": 1,
+    "UserCooldown": 5,
+    "Cost": 0,
+    "Count": 0,
+    "Usage": "A",
+    "Enabled": true,
+    "SoundFile": "",
+    "FKSoundFile": null
+  }
+]
