@@ -1,5 +1,5 @@
-import Tkinter as tk
 import ttk
+import Tkinter as tk
 
 global teal, darkWhite, darkGray, lightBlack
 darkGray = "#333333"
@@ -7,6 +7,7 @@ lightGray = "#666666"
 lightBlack = "#1b1c1d"
 darkWhite = "#eeeeee"
 teal = "#16b2ab"
+
 
 def CreateStyle():
     style = ttk.Style()
@@ -222,6 +223,7 @@ def CreateStyle():
         }
     })
     return style
+
 
 def AddRootOptions(main):
     main.option_add('*TCombobox*font', ('Calibri', 12))

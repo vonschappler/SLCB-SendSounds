@@ -12,6 +12,6 @@
     "integrityFixed"
   ], 
   "dbTable": "soundsSettings", 
-  "dbFolder": "SLCB_SendSounds_Database", 
-  "dbFileName": "SLCB_SendSounds_database.sqlite"
+  "dbFolder": "SendSounds-Database", 
+  "dbFileName": "SendSounds_Database.sqlite"
 }

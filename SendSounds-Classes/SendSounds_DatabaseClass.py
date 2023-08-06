@@ -1,11 +1,13 @@
-import sqlite3, json, codecs, os
+import sqlite3
+import json
+import codecs
+import os
 from collections import OrderedDict as od
-from SLCB_SendSounds_LoggerClass import Logger as log
+from SendSounds_LoggerClass import Logger as log
 
-global databaseLog
+global databaseLog, table, cListTrigger, cTrigger, cFilePath, cMessage, cSendAs, cVolume, cEnable, cUsesCount, cPassIntegrity, cIntegrityFixed
 databaseLog = log('dashboard')
 
-global table, cListTrigger, cTrigger, cFilePath, cMessage, cSendAs, cVolume, cEnable, cUsesCount, cPassIntegrity, cIntegrityFixed
 
 class Database():
     def __init__(self, dbSettingsFile=None, scriptSettingsFile=None):
@@ -16,13 +18,16 @@ class Database():
         self.startMsg = '[{time}] (INF) - Starting database...'
         try:
             with codecs.open(dbSettingsFile, encoding='utf-8-sig', mode='r') as f:
-                self.dbSettings = json.load(f, encoding='utf-8', object_pairs_hook=od)
-                self.startMsg += '\n[{time}] (INF) - Required asset "dbSettings.json" file found!'
+                self.dbSettings = json.load(
+                    f, encoding='utf-8', object_pairs_hook=od)
+                self.startMsg += '\n[{time}] (INF) - Required asset "SendSounds_dbSettings.json" file found!'
             with codecs.open(scriptSettingsFile, encoding='utf-8-sig', mode='r') as f:
-                scriptSettings = json.load(f, encoding='utf-8', object_pairs_hook=od)
+                scriptSettings = json.load(
+                    f, encoding='utf-8', object_pairs_hook=od)
                 self.soundsFolder = scriptSettings['sndFolderSFX'].lower()
             self.dbFolder = self.dbSettings['dbFolder']
-            self.dbFilePath = os.path.relpath(os.path.join(os.path.dirname(__file__), '../{folder}')).format(folder=self.dbFolder)
+            self.dbFilePath = os.path.relpath(os.path.join(os.path.dirname(
+                __file__), '../{folder}')).format(folder=self.dbFolder)
             self.dbFileName = self.dbSettings['dbFileName']
             self.dbColumns = self.dbSettings['dbColumns']
             self.dbTable = self.dbSettings['dbTable']
@@ -30,9 +35,10 @@ class Database():
         except Exception as e:
             self.startMsg += '\n[{time}] (WAR) - Unable to find one or more required assets or the required files are not in the right format. The script is creating a new files.'
             self.startMsg += '\n[{time}] (ERR) - System message: {err}'
-            self.dbFolder = 'SLCB_SendSounds_Database'
-            self.dbFileName = 'SLCB_SendSounds_database.sqlite'
-            self.dbFilePath = os.path.relpath(os.path.join(os.path.dirname(__file__), '../{folder}')).format(folder=self.dbFolder)
+            self.dbFolder = 'SendSounds-Database'
+            self.dbFileName = 'SendSounds_Database.sqlite'
+            self.dbFilePath = os.path.relpath(os.path.join(os.path.dirname(
+                __file__), '../{folder}')).format(folder=self.dbFolder)
             self.dbColumns = [
                 "sndListTrigger",
                 "sndTrigger",
@@ -46,8 +52,9 @@ class Database():
                 "integrityFixed"
             ]
             self.dbTable = 'soundsSettings'
-            self.soundsFolder = os.path.relpath(os.path.join(os.path.dirname(__file__), '../SLCB_SendSounds_Sounds'))
-            with codecs.open(os.path.relpath('dbSettings.json'), mode='w+', encoding='utf=8=sig') as f:
+            self.soundsFolder = os.path.relpath(os.path.join(
+                os.path.dirname(__file__), '../SendSounds-Sounds'))
+            with codecs.open(os.path.relpath(os.path.join(os.path.dirname(__file__), 'SendSounds_dbSettings.json')), mode='w+', encoding='utf=8=sig') as f:
                 settings = {
                     "dbColumns": self.dbColumns,
                     "dbFileName": self.dbFileName,
@@ -55,7 +62,7 @@ class Database():
                     "dbTable": self.dbTable
                 }
                 json.dump(settings, f, ensure_ascii=False, indent=2)
-                self.startMsg += '\n[{time}] (SUC) - Required asset "dbSettings.json" file created with success!'
+                self.startMsg += '\n[{time}] (SUC) - Required asset "SendSounds_dbSettings.json" file created with success!'
             pass
         self.startMsg += '\n[{time}] (SUC) - Database initialized with success!'
         self.startMsg = self.startMsg.format(time=databaseLog.getTime(), err=e)
@@ -83,7 +90,8 @@ class Database():
         conn = self.dbConns()
         try:
             createQ = 'create table if not exists {table} (id integer primary key autoincrement, {col0} text not null unique, {col1} text not null, {col2} text not null, {col3} integer not null default 50, {col4} text default "", {col5} text not null default "Chat", {col6} boolean default 1, {col7} integer default 0, {col8} boolean not null default 1, {col9} boolean)'
-            createQ = createQ.format(table=table, col0=cListTrigger, col1=cTrigger, col2=cFilePath, col3=cVolume, col4=cMessage, col5=cSendAs, col6=cEnable, col7=cUsesCount, col8=cPassIntegrity, col9=cIntegrityFixed)
+            createQ = createQ.format(table=table, col0=cListTrigger, col1=cTrigger, col2=cFilePath, col3=cVolume,
+                                     col4=cMessage, col5=cSendAs, col6=cEnable, col7=cUsesCount, col8=cPassIntegrity, col9=cIntegrityFixed)
             addIndexFile = 'create unique index if not exists {col1} on {table} ({col1})'
             addIndexFile = addIndexFile.format(col1=cFilePath, table=table)
             cursor = conn.cursor()
@@ -103,14 +111,19 @@ class Database():
         try:
             if args and args[0] != '':
                 for file in os.listdir(args[0]):
-                    trigger = file.strip('.mp3').replace(' ', '-').replace('_', '-')
+                    trigger = file.strip('.mp3').replace(
+                        ' ', '-').replace('_', '-')
                     filePath = os.path.realpath(os.path.join(args[0], file))
-                    msg += '\n{result}'.format(result=self.addSound(trigger, filePath))
-            else:    
+                    msg += '\n{result}'.format(
+                        result=self.addSound(trigger, filePath))
+            else:
                 for file in os.listdir(self.soundsFolder):
-                    trigger = file.strip('.mp3').replace(' ', '-').replace('_', '-')
-                    filePath = os.path.realpath(os.path.join(self.soundsFolder, file))
-                    msg += '\n{result}'.format(result=self.addSound(trigger, filePath))
+                    trigger = file.strip('.mp3').replace(
+                        ' ', '-').replace('_', '-')
+                    filePath = os.path.realpath(
+                        os.path.join(self.soundsFolder, file))
+                    msg += '\n{result}'.format(
+                        result=self.addSound(trigger, filePath))
             e = None
         except Exception as e:
             msg = '[{time}] (ERR) - Unable to add new sounds to the database'
@@ -125,11 +138,14 @@ class Database():
         conn = self.dbConns()
         cursor = conn.cursor()
         listTrigger = '{trigger} ({path})'
-        listTrigger = listTrigger.format(trigger=trigger, path=os.path.relpath(filePath))
+        listTrigger = listTrigger.format(
+            trigger=trigger, path=os.path.relpath(filePath))
         addSoundQ = 'insert into {table} ({col0}, {col1}, {col2}) values ("{listTrigger}", "{trigger}", "{filePath}")'
-        addSoundQ = addSoundQ.format(table=table, col0=cListTrigger, listTrigger=listTrigger, col1=cTrigger, trigger=trigger, col2=cFilePath, filePath=filePath)
+        addSoundQ = addSoundQ.format(table=table, col0=cListTrigger, listTrigger=listTrigger,
+                                     col1=cTrigger, trigger=trigger, col2=cFilePath, filePath=filePath)
         updateSoundQ = 'update {table} set {col1}=1 where {col2}="{listTrigger}"'
-        updateSoundQ = updateSoundQ.format(table=table, col1=cEnable, col2=cListTrigger, listTrigger=listTrigger)
+        updateSoundQ = updateSoundQ.format(
+            table=table, col1=cEnable, col2=cListTrigger, listTrigger=listTrigger)
         findQ = 'select {col1} from {table} where {col1}="{value}"'
         findQ = findQ.format(col1=cListTrigger, table=table, value=listTrigger)
         try:
@@ -149,7 +165,8 @@ class Database():
                 msg += '[{time}] (ERR) - Unable to add sound using "{trigger}" as trigger because it already exists on the database'
                 skipped += 1
             pass
-        msg = msg.format(time=databaseLog.getTime(), trigger=trigger, filePath=filePath, err=e)
+        msg = msg.format(time=databaseLog.getTime(),
+                         trigger=trigger, filePath=filePath, err=e)
         conn.commit()
         conn.close()
         return msg
@@ -173,7 +190,8 @@ class Database():
         msg = '[{time}] (INF) - Starting database integrity check...'
         msg += '\n[{time}] (INF) - Collecting information about database integrity...'
         fileListQ = 'select {col1}, {col2}, {col3}, {col4} from {table} order by id'
-        fileListQ = fileListQ.format(col1=cFilePath, col2=cEnable, col3=cPassIntegrity, col4=cIntegrityFixed, table=table)
+        fileListQ = fileListQ.format(
+            col1=cFilePath, col2=cEnable, col3=cPassIntegrity, col4=cIntegrityFixed, table=table)
         results = cursor.execute(fileListQ).fetchall()
         soundsFileList = os.listdir(folder)
         for result in results:
@@ -181,13 +199,15 @@ class Database():
                 fileToCheck = os.path.realpath(result[0]).lower()
                 fileName = fileToCheck.split('\\')[-1:][0]
                 if fileName in soundsFileList:
-                    compareFile = os.path.realpath(os.path.join(folder, fileName)).lower()
+                    compareFile = os.path.realpath(
+                        os.path.join(folder, fileName)).lower()
                 else:
                     compareFile = None
                 if (fileToCheck != compareFile):
                     if not bool(result[3]):
                         notPassQ = 'update {table} set {col1}=0, {col2}=0 where {col3}="{value}"'
-                        notPassQ = notPassQ.format(table=table, col1=cPassIntegrity, col2=cIntegrityFixed, col3=cFilePath, value=result[0])
+                        notPassQ = notPassQ.format(
+                            table=table, col1=cPassIntegrity, col2=cIntegrityFixed, col3=cFilePath, value=result[0])
                         cursor.execute(notPassQ)
                         conn.commit()
                         self.toFixList.append(result[0])
@@ -196,7 +216,8 @@ class Database():
                         self.passed += 1
                 else:
                     notPassQ = 'update {table} set {col1}=0, {col2}=Null where {col3}="{value}"'
-                    notPassQ = notPassQ.format(table=table, col1=cPassIntegrity, col2=cIntegrityFixed, col3=cFilePath, value=result[0])
+                    notPassQ = notPassQ.format(
+                        table=table, col1=cPassIntegrity, col2=cIntegrityFixed, col3=cFilePath, value=result[0])
                     cursor.execute(notPassQ)
                     conn.commit()
                     self.passed += 1
@@ -210,8 +231,10 @@ class Database():
             msg += '\n[{time}] (INF) - List of entries which need to be fixed:'
             self.hasPassed = False
             for entry in self.toFixList:
-                msg += '\n[{time}] (INF) - {entry}'.format(time=databaseLog.getTime(), entry=entry)
-        msg = msg.format(time=databaseLog.getTime(), passed=self.passed, notPassed=self.notPassed, folder=folder)
+                msg += '\n[{time}] (INF) - {entry}'.format(
+                    time=databaseLog.getTime(), entry=entry)
+        msg = msg.format(time=databaseLog.getTime(
+        ), passed=self.passed, notPassed=self.notPassed, folder=folder)
         conn.close()
         return [msg, self.hasPassed, self.notPassed]
 
@@ -263,7 +286,7 @@ class Database():
             fileToCheck = os.path.relpath(result[0])
             if fileToCheck not in soundsFileList:
                 countFix += 1
-                if args and args[0] =='fix':
+                if args and args[0] == 'fix':
                     msg = '[{time}] (INF) - Clearing  databasabe by removing entries which do not have a sound file linked to it...'
                     try:
                         notFoundQ = 'delete from {table} where {col1}="{value}"'
@@ -287,7 +310,8 @@ class Database():
             msg += '\n[{time}] (INF) - Total entries detected: {toFix}'
         if deleteCount > 0:
             msg += '\n[{time}] (INF) - Total entries deleted: {count}'
-        msg = msg.format(time=databaseLog.getTime(), count=deleteCount, toFix=countFix, folder=self.soundsFolder)
+        msg = msg.format(time=databaseLog.getTime(
+        ), count=deleteCount, toFix=countFix, folder=self.soundsFolder)
         conn.commit()
         conn.close()
         return [msg, countFix]
@@ -296,7 +320,8 @@ class Database():
         conn = self.dbConns()
         cursor = conn.cursor()
         findQ = 'select rowid, {col1}, {col2}, {col3}, {col4}, {col5}, {col6}, {col7} from {table} where rowid={rowid}'
-        findQ = findQ.format(table=table, col1=cTrigger, col2=cFilePath, col3=cVolume, col4=cMessage, col5=cSendAs, col6=cEnable, col7=cUsesCount, rowid=rowid)
+        findQ = findQ.format(table=table, col1=cTrigger, col2=cFilePath, col3=cVolume,
+                             col4=cMessage, col5=cSendAs, col6=cEnable, col7=cUsesCount, rowid=rowid)
         try:
             foundTrigger = cursor.execute(findQ).fetchone()
         except:
@@ -307,7 +332,8 @@ class Database():
         conn = self.dbConns()
         cursor = conn.cursor()
         countQ = 'select {col1} from {table} where {col2}="{trigger}"'
-        countQ = countQ.format(col1=cUsesCount, table=table, col2=cTrigger, trigger=trigger)
+        countQ = countQ.format(col1=cUsesCount, table=table,
+                               col2=cTrigger, trigger=trigger)
         count = cursor.execute(countQ).fetchone()
         msg = ''
         if count:
@@ -323,14 +349,15 @@ class Database():
                 msg += '[{time}] (ERR) - Could not update usage count for  {trigger}...'
                 msg += '\n[{time}] (ERR) - System message: {err}'
                 pass
-            msg = msg.format(time=databaseLog.getTime(), trigger=trigger, err=e, newCount=count[0]+1)
+            msg = msg.format(time=databaseLog.getTime(),
+                             trigger=trigger, err=e, newCount=count[0]+1)
         else:
             msg += '[{time}] (INF) - The database search for {trigger} returned no results'
             msg = msg.format(time=databaseLog.getTime(), trigger=trigger)
         conn.commit()
         conn.close()
         return msg
-    
+
     def deleteSound(self, item):
         conn = self.dbConns()
         cursor = conn.cursor()
@@ -352,7 +379,7 @@ class Database():
         conn.commit()
         conn.close()
         return msg
-    
+
     def deleteOne(self, trigger):
         result = self.findOne(trigger)
         conn = self.dbConns()
@@ -361,7 +388,8 @@ class Database():
         if result:
             try:
                 deleteQ = 'delete from {table} where {col1}="{value}"'
-                deleteQ = deleteQ.format(table=table, col1=cTrigger, value=trigger)
+                deleteQ = deleteQ.format(
+                    table=table, col1=cTrigger, value=trigger)
                 msg += '[{time}] (SUC) - Entry linked to "{trigger}" was deleted successfully'
                 cursor.execute(deleteQ)
                 updateQ = 'update sqlite_sequence set seq=(select max(id) from {table}) where name="{table}"'
@@ -384,13 +412,14 @@ class Database():
         conn = self.dbConns()
         cursor = conn.cursor()
         findQ = 'select {col0}, {col1}, {col2}, {col3}, {col4}, {col5}, {col6}, {col7} from {table} where {col0}="{item}"'
-        findQ = findQ.format(table=table, col0=cListTrigger, col1=cTrigger, col2=cFilePath, col3=cVolume, col4=cMessage, col5=cSendAs, col6=cEnable, col7=cUsesCount, item=item)
+        findQ = findQ.format(table=table, col0=cListTrigger, col1=cTrigger, col2=cFilePath,
+                             col3=cVolume, col4=cMessage, col5=cSendAs, col6=cEnable, col7=cUsesCount, item=item)
         try:
             foundTrigger = cursor.execute(findQ).fetchone()
         except:
             foundTrigger = None
         return foundTrigger
-    
+
     def updateSound(self, item, data):
         conn = self.dbConns()
         cursor = conn.cursor()
@@ -399,7 +428,8 @@ class Database():
             item = item
             newTrigger = data[1]
             newListTrigger = '{newTrigger} ({path})'
-            newListTrigger = newListTrigger.format(newTrigger=newTrigger, path=os.path.relpath(data[2]))
+            newListTrigger = newListTrigger.format(
+                newTrigger=newTrigger, path=os.path.relpath(data[2]))
             newVolume = data[3]
             if data[4] == None:
                 newMessage = ''
@@ -411,19 +441,20 @@ class Database():
             else:
                 newEnable = 0
             updateQ = 'update {table} set {col0}="{val0}", {col1}="{val1}", {col2}={val2}, {col3}="{val3}", {col4}="{val4}", {col5}={val5} where {col0}="{item}"'
-            updateQ = updateQ.format(table=table, col0=cListTrigger, val0=newListTrigger, col1=cTrigger, val1=newTrigger, col2=cVolume, val2=newVolume, col3=cMessage, val3=newMessage, col4=cSendAs, val4=newSendAs, col5=cEnable, val5=newEnable, item=item)
+            updateQ = updateQ.format(table=table, col0=cListTrigger, val0=newListTrigger, col1=cTrigger, val1=newTrigger, col2=cVolume,
+                                     val2=newVolume, col3=cMessage, val3=newMessage, col4=cSendAs, val4=newSendAs, col5=cEnable, val5=newEnable, item=item)
             cursor.execute(updateQ)
-            msg +='\n[{time}] (SUC) - Information updated with success!'
+            msg += '\n[{time}] (SUC) - Information updated with success!'
             e = None
         except Exception as e:
-            msg +='\n[{time}] (ERR) - Unable to update information for the selected sound'
-            msg +='\n[{time}] (ERR) - System message: {err}'
+            msg += '\n[{time}] (ERR) - Unable to update information for the selected sound'
+            msg += '\n[{time}] (ERR) - System message: {err}'
             pass
         msg = msg.format(time=databaseLog.getTime(), err=e)
         conn.commit()
         conn.close()
         return msg
-    
+
     def getTriggersList(self):
         conn = self.dbConns()
         cursor = conn.cursor()

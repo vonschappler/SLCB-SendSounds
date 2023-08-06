@@ -23,6 +23,14 @@
     "tooltip": "Need help online?\nJoin von_Schappler's Discord Server",
     "group": "Support:"
   },
+  "updatesBtn": {
+    "type": "button",
+    "label": "Check for Updates",
+    "function": "OpenReleases",
+    "wsevent": "",
+    "tooltip": "Check for updates and new releases",
+    "group": "Support:"
+  },
   "websiteBtn": {
     "type": "button",
     "label": "von Schappler's Site",
