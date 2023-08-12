@@ -64,6 +64,23 @@
 
     1. Beta Releases:
 
+        + [SLCB] SendSounds beta-2.0.0:
+            - General fixes for issues that prevented the script from running on the user machine
+                * Fixed an issue when checking for the optional dependecy **pygame** when the script is starting
+                * Fixed an issue where the script was not saving the selected folder correctly
+                * Fixed an issue that prevents some commands from being executed
+                * Fixed an issue that prevented log files management
+            - Updated the Dasboard GUI text for better compreension of what "datbase issues" mean
+            - Added the following functions / buttons to the Dashboard GUI:
+                * Enable disabled sound triggers
+                * Delete disabled sound triggers
+        
+        + [SLCB] SendSounds beta-1.1.0:
+            - Fixed an issue where the script could conflict with other scripts which make reference to a sqlite database
+            - Added the buttons to the script GUI:
+                * Open User Guide
+                * Check fo Updates
+
         + [SLCB] SendSounds beta-1.0.0:
             - Initial release for testing
 

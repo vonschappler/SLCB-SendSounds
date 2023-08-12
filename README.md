@@ -59,6 +59,17 @@ A full guide on how to use the script can be found [this wiki](https://github.co
 
 ## Changelog:
 
+- [Version beta-2.0.0](https://github.com/vonschappler/SLCB-SendSounds/releases/tag/beta-2.0.0):
+  - General fixes for issues that prevented the script from running on the user machine
+    - Fixed an issue when checking for the optional dependecy **pygame** when the script is starting
+    - Fixed an issue where the script was not saving the selected folder for the script settings correctly
+    - Fixed an issue that prevented some commands from being executed
+    - Fixed an issue that prevented log files management
+  - Updated the Dasboard GUI text for better compreension of what "datbase issues" mean
+  - Added the following functions / buttons to the Dashboard GUI:
+    - Enable disabled sound triggers
+    - Delete disabled sound triggers
+
 - [Version beta-1.1.0](https://github.com/vonschappler/SLCB-SendSounds/releases/tag/beta-1.1.0):
   - Fixed an issue where the script could conflict with other scripts which make reference to a sqlite database
   - Added the buttons:

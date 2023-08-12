@@ -1,16 +1,10 @@
-import SendSounds_Theme
-import Tkinter as tk
-import SendSounds_Settings
-import SendSounds_About
-import ttk
-import SendSounds_Functions as fn
-import os
+import SendSounds_Theme, Tkinter as tk, SendSounds_Settings, SendSounds_About, ttk, SendSounds_Functions as fn, os
 
 global scriptName, version, icofile, runAs
 scriptName = fn.dbLogger.scriptName
 version = fn.dbLogger.version
-icoFile = os.path.realpath(os.path.join(
-    os.path.dirname(__file__), 'assets/icon.ico'))
+icoFile = os.path.realpath(os.path.join(os.path.dirname(__file__), 'assets/icon.ico'))
+
 
 #
 #   Dashboard Settings
@@ -27,8 +21,7 @@ def Init():
     windowH = int(screenH/2)
     centerY = int(screenH/2 - windowH/2)
     geometry = '{width}x{height}+{posX}+{posY}'
-    geometry = geometry.format(width=str(windowW), height=str(
-        windowH), posX=str(centerX), posY=str(centerY))
+    geometry = geometry.format(width=str(windowW), height=str(windowH), posX=str(centerX), posY=str(centerY))
     root.geometry(geometry)
     root.columnconfigure(0, weight=2)
     root.rowconfigure(0, weight=2)
@@ -38,15 +31,12 @@ def Init():
     statusBarFrame.grid(column=0, row=2, sticky=tk.W+tk.E, columnspan=3)
     statusBarFrame.columnconfigure(0, weight=10)
     statusBarFrame.columnconfigure(1, weight=2)
-    statusBarLeft = ttk.Label(statusBarFrame, anchor=tk.W, relief=tk.GROOVE,
-                              justify=tk.RIGHT, style='status.TLabel', takefocus=0)
+    statusBarLeft = ttk.Label(statusBarFrame, anchor=tk.W, relief=tk.GROOVE, justify=tk.RIGHT, style='status.TLabel', takefocus=0)
     statusBarLeft.grid(column=0, row=0, sticky=tk.W+tk.E, columnspan=2)
     statusBarLeft.grid_propagate(False)
     statusBarRightText = ' {script} {version} '
-    statusBarRightText = statusBarRightText.format(
-        script=scriptName, version=version)
-    statusBarRight = ttk.Label(statusBarFrame, text=statusBarRightText, anchor=tk.E,
-                               relief=tk.GROOVE, justify=tk.RIGHT, style='status.TLabel', takefocus=0)
+    statusBarRightText = statusBarRightText.format(script=scriptName, version=version)
+    statusBarRight = ttk.Label(statusBarFrame, text=statusBarRightText, anchor=tk.E, relief=tk.GROOVE, justify=tk.RIGHT, style='status.TLabel', takefocus=0)
     statusBarRight.grid(column=2, row=0, sticky=tk.W+tk.E, ipadx=10)
     statusBarRight.grid_propagate(False)
     title = statusBarRightText + '- dashboard'
@@ -61,16 +51,15 @@ def Init():
     mainFrame.grid(column=0, row=0, sticky=tk.E+tk.W+tk.N+tk.S, ipadx=10)
     mainFrame.add(SendSounds_Settings.createTab(mainFrame), text='Settings')
     mainFrame.add(SendSounds_About.createTab(mainFrame), text='About')
-    mainFrame.bind('<<NotebookTabChanged>>', lambda e, frame=mainFrame,
-                   bar=statusBarLeft: fn.changeTabStatus(frame, bar))
-    root.bind_all('<FocusIn>', lambda e, root=root,
-                  textZone=SendSounds_Settings.tabHelpText: fn.changeHelp(e, root, textZone))
+    mainFrame.bind('<<NotebookTabChanged>>', lambda e, frame=mainFrame, bar=statusBarLeft: fn.changeTabStatus(frame, bar))
+    root.bind_all('<FocusIn>', lambda e, root=root, textZone=SendSounds_Settings.tabHelpText: fn.changeHelp(e, root, textZone))
     return
 
 
 Init()
+
 # Tab styling to fit window
-style.configure('TNotebook.Tab',
-                width=root.winfo_screenwidth()/len(mainFrame.tabs()))
+style.configure('TNotebook.Tab',width=root.winfo_screenwidth()/len(mainFrame.tabs()))
+
 root.mainloop()
 fn.dbLogger.logEnd()

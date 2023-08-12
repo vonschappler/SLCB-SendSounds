@@ -1,24 +1,15 @@
+import json, codecs, os, sys, Tkinter as tk, SendSounds_Theme
+sys.path.append(os.path.join(os.path.dirname(__file__), '../SendSounds-Classes'))
 from shutil import copy
-import json
-import codecs
-import os
-import sys
-import Tkinter as tk
-import SendSounds_Theme
-sys.path.append(os.path.join(
-    os.path.dirname(__file__), '../SendSounds-Classes'))
-from SendSounds_LoggerClass import Logger as log
 from SendSounds_DatabaseClass import Database as db
+from SendSounds_LoggerClass import Logger as log
 
 global dbLogger, dbSettingsFile, scriptSettingsFile, soundsDB, helpFile, helpText
 dbLogger = log('dashboard')
 dbLogger.logInit()
-dbSettingsFile = os.path.relpath(os.path.join(os.path.dirname(
-    __file__), '../SendSound-Classes/SendSounds_dbSettings.json'))
-scriptSettingsFile = os.path.relpath(os.path.join(
-    os.path.dirname(__file__), '../SendSounds_Settings.json'))
-helpFile = os.path.relpath(os.path.join(
-    os.path.dirname(__file__), 'assets/SendSounds_Help.json'))
+dbSettingsFile = os.path.realpath(os.path.join(os.path.dirname(__file__), '../SendSounds-Classes/SendSounds_dbSettings.json'))
+scriptSettingsFile = os.path.realpath(os.path.join(os.path.dirname(__file__), '../SendSounds_Settings.json'))
+helpFile = os.path.realpath(os.path.join(os.path.dirname(__file__), 'assets/SendSounds_Help.json'))
 
 
 def printLog(msg):
@@ -40,8 +31,7 @@ def createSettings(data, file):
     global dbLogger
     try:
         with codecs.open(file, mode='w+', encoding='utf-8-sig') as f:
-            json.dump(data, f, ensure_ascii=False, indent=2,
-                      sort_keys=True, encoding='utf-8')
+            json.dump(data, f, ensure_ascii=False, indent=2, sort_keys=True, encoding='utf-8')
         msg = '[{time}] (SUC) - Required file "{file}" created with success!'
         e = None
     except Exception as e:
@@ -82,8 +72,7 @@ def createFileBackup(fileName):
         msg = '[{time}] (ERR) - Unable to create backup of file "{file}" ...'
         msg += '\n[{time}] (ERR) - System message: {err}'
         pass
-    msg = msg.format(file=fileName, backup=backFileName,
-                     err=e, time=dbLogger.getTime())
+    msg = msg.format(file=fileName, backup=backFileName, err=e, time=dbLogger.getTime())
     printLog(msg)
     return
 
@@ -100,8 +89,7 @@ def restoreFileBackup(fileName, cb):
         msg = '[{time}] (ERR) - Unable to restore backup of file "{file}" ...'
         msg += '\n[{time}] (ERR) - System message: {err}'
         pass
-    msg = msg.format(time=dbLogger.getTime(), file=fileName,
-                     err=e, backup=backFileName)
+    msg = msg.format(time=dbLogger.getTime(), file=fileName, err=e, backup=backFileName)
     printLog(msg)
     return soundsDB
 
@@ -116,7 +104,7 @@ def readJson(jsonFile):
     except Exception as e:
         jsonData = None
         msg = '[{time}] (ERR) - Unable to load the required file "{file}"...'
-        msg += '\n[{time}] (ERR) - System message: {err})'
+        msg += '\n[{time}] (ERR) - System message: {err}'
         pass
     msg = msg.format(time=dbLogger.getTime(), file=jsonFile, err=e)
     printLog(msg)
@@ -136,8 +124,7 @@ def changeTabStatus(tab, bar, *args):
 
 
 def openDashboardLogs():
-    folder = os.path.realpath(os.path.join(
-        os.path.dirname(__file__), '../SendSound-Logs/Dashboard'))
+    folder = os.path.realpath(os.path.join(os.path.dirname(__file__), '../SendSounds-Logs/Dashboard'))
     os.startfile(folder)
     return
 
@@ -148,8 +135,7 @@ def deleteDashboardLogs():
 
 
 def openScriptLogs():
-    folder = os.path.realpath(os.path.join(
-        os.path.dirname(__file__), '../SendSound-Logs/Script'))
+    folder = os.path.realpath(os.path.join(os.path.dirname(__file__), '../SendSounds-Logs/Script'))
     os.startfile(folder)
     return
 
@@ -160,8 +146,7 @@ def deleteScriptLogs():
 
 
 def openLogs():
-    folder = os.path.realpath(os.path.join(
-        os.path.dirname(__file__), '../SendSound-Logs'))
+    folder = os.path.realpath(os.path.join(os.path.dirname(__file__), '../SendSounds-Logs'))
     os.startfile(folder)
     return
 
@@ -258,16 +243,14 @@ def changeHelp(e, root, textZone, *args):
         textZone.config(state='normal')
         textZone.delete('0.0', tk.END)
         textZone.insert(tk.END, helpText[key])
-        textZone.config(state='disabled', selectbackground=SendSounds_Theme.darkGray,
-                        selectforeground=SendSounds_Theme.darkWhite, cursor='arrow')
+        textZone.config(state='disabled', selectbackground=SendSounds_Theme.darkGray, selectforeground=SendSounds_Theme.darkWhite, cursor='arrow')
     except Exception as e:
         if e.args[0] != 'popdown':
             text = 'Quick help fpr this field was not found. Please contact the developer'
             textZone.config(state='normal')
             textZone.delete('0.0', tk.END)
             textZone.insert(tk.END, text)
-            textZone.config(state='disabled', selectbackground=SendSounds_Theme.darkGray,
-                            selectforeground=SendSounds_Theme.darkWhite, cursor='arrow')
+            textZone.config(state='disabled', selectbackground=SendSounds_Theme.darkGray, selectforeground=SendSounds_Theme.darkWhite, cursor='arrow')
         else:
             pass
         pass

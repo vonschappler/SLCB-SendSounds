@@ -4,29 +4,26 @@
 # ---------------------------
 #   Import Libraries
 # ---------------------------
-from collections import deque
-import sys
-import os
-import codecs
-import json
-import clr
-import re
-from random import randint
+import sys, os, codecs, json, clr, re
+clr.AddReference("IronPython.SQLite.dll")
 clr.AddReference("IronPython.Modules.dll")
-sys.path.append(os.path.join(
-    os.path.dirname(__file__), './SendSounds-Classes'))
-sys.path.append(os.path.join(os.path.dirname(
-    __file__), './SendSounds-Database'))
+sys.path.append(os.path.join(os.path.dirname(__file__), './SendSounds-Classes'))
+sys.path.append(os.path.join(os.path.dirname(__file__), './SendSounds-Database'))
+from collections import deque
+from random import randint
 from SendSounds_LoggerClass import Logger as log
 from SendSounds_DatabaseClass import Database as db
 
-
-global scriptLogger, startMsg
+global scriptLogger, startMsg, streamer
 scriptLogger = log('script')
+streamer = ''
+
 
 # ---------------------------
 #   [Required] Script Information
 # ---------------------------
+
+
 ScriptName = scriptLogger.scriptName
 Website = 'http://rebrand.ly/vonWebsite'
 Description = 'Sends the sound files added to Streamlabs Chatbot to an Overlay, simulating a virtual input'
@@ -36,14 +33,13 @@ Version = scriptLogger.version
 # ---------------------------
 #   Define Global Variables
 # ---------------------------
-global scriptSettingsFile, scriptSettings, dbSettingsFile, soundsDB, guiFile
 
-scriptSettingsFile = os.path.join(
-    os.path.dirname(__file__), 'SendSounds_Settings.json')
-dbSettingsFile = os.path.join(os.path.dirname(
-    __file__), './SendSounds-Classes/SendSounds_dbSettings.json')
-guiFile = os.path.realpath(os.path.join(os.path.dirname(
-    __file__), './SendSounds-GUI/SendSounds_App.py'))
+
+global scriptSettingsFile, scriptSettings, dbSettingsFile, soundsDB, guiFile
+scriptSettingsFile = os.path.join(os.path.dirname(__file__), 'SendSounds_Settings.json')
+dbSettingsFile = os.path.join(os.path.dirname(__file__), './SendSounds-Classes/SendSounds_dbSettings.json')
+guiFile = os.path.realpath(os.path.join(os.path.dirname(__file__), './SendSounds-GUI/SendSounds_App.py'))
+
 
 # ---------------------------
 #   [Required] Initialize Data (Only called on load)
@@ -52,8 +48,7 @@ guiFile = os.path.realpath(os.path.join(os.path.dirname(
 
 def Init():
     global startMsg, soundsDB, sndGlobalVolume, saveScriptLogs, sndFolderSFX, sndCommandTrigger
-    global triggerList, volumeList, pathList, msgList, sendAsList, commandList, sfxQ
-    global streamer
+    global triggerList, volumeList, pathList, msgList, sendAsList, commandList, sfxQ, streamer
     try:
         streamer = Parent.GetChannelName()
         startMsg = scriptLogger.logInit()
@@ -75,9 +70,12 @@ def Init():
         sendAsList = soundsDB.getInfoDB('sndSendAs')
         commandList = ['play', 'opendb', 'reload', 'list']
     except Exception as e:
-        Parent.SendStreamMessage('Script failed starting')
-        Parent.SendStreamMessage(str(e))
+        msg = '({script} - {version}) Failed to start...'
+        msg += '({script} - {version}) - Error message: {err}'
+        msg = msg.format(script=ScriptName, version=Version, err=e)
+        Parent.SendStreamMessage(msg)
     return
+
 
 # ---------------------------
 #   [Required] Execute Data / Process messages
@@ -103,6 +101,7 @@ def Execute(data):
                 printLog(logMsg)
     return
 
+
 # ---------------------------
 #   [Required] Tick method (Gets called during every iteration even when there is no incoming data)
 # ---------------------------
@@ -110,7 +109,7 @@ def Execute(data):
 
 def Tick():
     global sfxQ, sfxDuration
-    if sfxQ and not Parent.IsOnCooldown(ScriptName, 'delay'):
+    if len(sfxQ) > 0:
         payload = sfxQ[0]
         sfx = payload['sfx']
         toPlay = payload['audio']
@@ -120,6 +119,7 @@ def Tick():
             soundsDB.updateUseCount(sfx)
             sfxQ.popleft()
     return
+
 
 # ---------------------------
 #   [Optional] Parse method (Allows you to create your own custom $parameters)
@@ -141,6 +141,7 @@ def Parse(parseString, userid, username, targetid, targetname, message):
             return parseString.replace(regex.group(0), "")
     return parseString
 
+
 # ---------------------------
 #   [Optional] Reload Settings (Called when a user clicks the Save Settings button in the Chatbot UI)
 # ---------------------------
@@ -152,6 +153,7 @@ def ReloadSettings():
     Init()
     return
 
+
 # ---------------------------
 #   [Optional] Unload (Called when a user reloads their scripts or closes the bot / cleanup stuff)
 # ---------------------------
@@ -161,6 +163,7 @@ def Unload():
     global scriptLogger
     scriptLogger.logEnd()
     return
+
 
 # ---------------------------
 #   [Optional] ScriptToggled (Notifies you when a user disables your script or enables it)
@@ -174,10 +177,10 @@ def ScriptToggled(state):
     else:
         status = 'disabled'
     msg = '/me : @{streamer}, ({script} - {version}) is {status}...'
-    msg = msg.format(streamer=streamer, script=ScriptName,
-                     version=Version, status=status)
+    msg = msg.format(streamer=streamer, script=ScriptName, version=Version, status=status)
     SendInfo(streamer, 'whisper', msg)
     return
+
 
 # ---------------------------
 #   Script Functions
@@ -193,11 +196,11 @@ def printLog(msg):
 def RunCommand(user, command, *args):
     global sfxQ, streamer
     if command in commandList:
-        if command == 'play' and user == streamer:
+        if command == 'play':
             sfxQ.append(SendAudioToOverlay(args[0]))
-        if command == 'opendb' and user == streamer:
+        if command == 'opendb':
             OpenGUI()
-        if command == 'reload' and user == streamer:
+        if command == 'reload':
             ReloadSettings()
         if command == 'list':
             PrintSoundList(user)
@@ -255,8 +258,7 @@ def PrintSoundList(user):
         else:
             list = []
     msg += '\n/me : in order to play any of the sounds, use {trigger} followed by the sound name to be played. Try out for example {trigger}{sound} on chat and enjoy!'
-    msg = msg.format(trigger=sndCommandTrigger,
-                     sound=triggerList[randint(0, len(triggerList))])
+    msg = msg.format(trigger=sndCommandTrigger, sound=triggerList[randint(0, len(triggerList))])
     Parent.SendStreamMessage(msg)
     return
 
@@ -273,6 +275,7 @@ def GetList():
         msg = msg[500:]
     return listToProcess
 
+
 # ---------------------------
 #   Streamlabs Chatbot GUI buttons functions
 # ---------------------------
@@ -283,21 +286,15 @@ def OpenReadMe():
     os.startfile(ReadMe)
     return
 
-
 def OpenUserGuide():
     Guide = 'https://github.com/vonschappler/SLCB-SendSounds/wiki/User-Guide'
     os.startfile(Guide)
     return
 
-
 def OpenGUI():
     global guiFile
-    try:
-        command = 'py -2 \"{file}\"'.format(file=guiFile)
-        os.system(command)
-    except:
-        command = 'python \"{file}"'.format(file=guiFile)
-        os.system(command)
+    command = 'python \"{file}"'.format(file=guiFile)
+    os.system(command)
     return
 
 
