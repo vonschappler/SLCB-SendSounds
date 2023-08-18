@@ -59,6 +59,9 @@ A full guide on how to use the script can be found [this wiki](https://github.co
 
 ## Changelog:
 
+- [Version beta-2.0.1](https://github.com/vonschappler/SLCB-SendSounds/releases/tag/beta-2.0.1):
+  - Fixed an issue where triggers generated automatically were missing starting  "m" or "p" on their names
+
 - [Version beta-2.0.0](https://github.com/vonschappler/SLCB-SendSounds/releases/tag/beta-2.0.0):
   - General fixes for issues that prevented the script from running on the user machine
     - Fixed an issue when checking for the optional dependecy **pygame** when the script is starting
