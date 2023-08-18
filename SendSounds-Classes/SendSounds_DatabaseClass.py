@@ -103,12 +103,12 @@ class Database():
         try:
             if args and args[0] != '':
                 for fileName in os.listdir(args[0]):
-                    trigger = fileName.strip('.mp3').replace(' ', '-').replace('_', '-')
+                    trigger = fileName.split('.mp3')[0].replace(' ', '-').replace('_', '-')
                     filePath = os.path.realpath(os.path.join(args[0], fileName))
                     msg += '\n{result}'.format(result=self.addSound(trigger, filePath))
             else:
                 for fileName in os.listdir(self.soundsFolder):
-                    trigger = fileName.strip('.mp3').replace(' ', '-').replace('_', '-')
+                    trigger = fileName.split('.mp3')[0].replace(' ', '-').replace('_', '-')
                     filePath = os.path.realpath(os.path.join(self.soundsFolder, fileName))
                     msg += '\n{result}'.format(result=self.addSound(trigger, filePath))
             e = None
