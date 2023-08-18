@@ -6,7 +6,7 @@ global logFolder, logFile
 class Logger():
     def __init__(self, mode=None):
         self.scriptName = '[SLCB] SendSounds'
-        self.version = 'b2.0.0'
+        self.version = 'b2.0.1'
         if mode == 'dashboard':
             self.logFolder = os.path.realpath(os.path.join(os.path.dirname(__file__), '..\SendSounds-Logs\Dashboard'))
         elif mode == 'script' or mode == None:
