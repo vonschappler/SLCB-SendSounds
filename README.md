@@ -33,7 +33,7 @@ This is a Streamlabs Chatbot script mabe by request, created to play sound files
 
 ## User guide:
 
-A full guide on how to use the script can be found [this wiki](https://github.com/vonschappler/SLCB-SendSounds/wiki/User-Guide).
+A full guide on how to use the script can be found on [the script wiki](https://github.com/vonschappler/SLCB-SendSounds/wiki/User-Guide).
 
 ## Image previews:
 

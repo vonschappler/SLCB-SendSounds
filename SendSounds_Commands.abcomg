@@ -4,7 +4,7 @@
     "Permission": "Caster",
     "Info": "",
     "Group": "[SLCB] - SENDSOUNDS",
-    "Response": "$desc(Use this command to open the dashboard control of the script [SCB] SendSounds)\r\n$sendsounds(opendb)",
+    "Response": "$desc(Use this command to open the dashboard control of the script [SLCB] SendSounds)\r\n$sendsounds(opendb)",
     "Cooldown": 0,
     "UserCooldown": 0,
     "Cost": 0,
