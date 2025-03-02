@@ -262,10 +262,10 @@ def OpenUserGuide():
 def OpenGUI():
     global guiFile
     try:
-        command = 'py -2 \"{file}"'.format(file=guiFile)
+        command = 'python \"{file}"'.format(file=guiFile)
         os.system(command)
     except:
-        command = 'python \"{file}"'.format(file=guiFile)
+        command = 'py -2 \"{file}"'.format(file=guiFile)
         os.system(command)
     return
 

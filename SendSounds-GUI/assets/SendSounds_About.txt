@@ -52,6 +52,9 @@
 
     1. Official releases:
 
+        + [SLCB] SendSounds v-1.0.1
+            - Added virtual click event to overlay, to prevent OBS from playing the sounds, prior to last OBS updates
+
         + [SLCB] SendSounds v-1.0.0
             - Added improved documentation
             - Changed version numbering to match the current release
