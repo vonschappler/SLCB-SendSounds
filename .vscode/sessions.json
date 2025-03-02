@@ -1,0 +1,40 @@
+{
+  "$schema": "https://cdn.statically.io/gh/nguyenngoclongdev/cdn/main/schema/v10/terminal-keeper.json",
+  "theme": "tribe",
+  "active": "default",
+  "activateOnStartup": true,
+  "keepExistingTerminals": false,
+  "sessions": {
+    "default": [
+      {
+        "name": "code",
+        "autoExecuteCommands": true,
+        "icon": "terminal-powershell",
+        "color": "terminal.ansiGreen",
+        "commands": [
+          ""
+        ]
+      },
+      {
+        "name": "release",
+        "autoExecuteCommands": true,
+        "icon": "tag",
+        "color": "terminal.ansiGreen",
+        "commands": [
+          "d:\\",
+          "cd D:\\Chatbot\\SLCB-Scripts\\SLCB-SendSounds"
+        ]
+      },
+      {
+        "name": "wiki",
+        "autoExecuteCommands": true,
+        "icon": "github-alt",
+        "color": "terminal.ansiGreen",
+        "commands": [
+          "d:\\",
+          "cd d:\\Chatbot\\SLCB-Scripts\\SLCB-SendSounds\\wiki"
+        ]
+      }
+    ]
+  }
+}

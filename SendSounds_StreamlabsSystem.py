@@ -4,13 +4,18 @@
 # ---------------------------
 #   Import Libraries
 # ---------------------------
-import sys, os, codecs, json, clr, re
+from collections import deque
+from random import randint
+import sys
+import os
+import codecs
+import json
+import clr
+import re
 clr.AddReference("IronPython.SQLite.dll")
 clr.AddReference("IronPython.Modules.dll")
 sys.path.append(os.path.join(os.path.dirname(__file__), './SendSounds-Classes'))
 sys.path.append(os.path.join(os.path.dirname(__file__), './SendSounds-Database'))
-from collections import deque
-from random import randint
 from SendSounds_LoggerClass import Logger as log
 from SendSounds_DatabaseClass import Database as db
 
@@ -18,23 +23,18 @@ global scriptLogger, startMsg, streamer
 scriptLogger = log('script')
 streamer = ''
 
-
 # ---------------------------
 #   [Required] Script Information
 # ---------------------------
-
-
 ScriptName = scriptLogger.scriptName
-Website = 'http://rebrand.ly/vonWebsite'
+Website = 'https://vonschappler.github.io'
 Description = 'Sends the sound files added to Streamlabs Chatbot to an Overlay, simulating a virtual input'
-Creator = 'von_Schappler'
+Creator = 'von Schappler'
 Version = scriptLogger.version
 
 # ---------------------------
 #   Define Global Variables
 # ---------------------------
-
-
 global scriptSettingsFile, scriptSettings, dbSettingsFile, soundsDB, guiFile
 scriptSettingsFile = os.path.join(os.path.dirname(__file__), 'SendSounds_Settings.json')
 dbSettingsFile = os.path.join(os.path.dirname(__file__), './SendSounds-Classes/SendSounds_dbSettings.json')
@@ -44,8 +44,6 @@ guiFile = os.path.realpath(os.path.join(os.path.dirname(__file__), './SendSounds
 # ---------------------------
 #   [Required] Initialize Data (Only called on load)
 # ---------------------------
-
-
 def Init():
     global startMsg, soundsDB, sndGlobalVolume, saveScriptLogs, sndFolderSFX, sndCommandTrigger
     global triggerList, volumeList, pathList, msgList, sendAsList, commandList, sfxQ, streamer
@@ -76,12 +74,9 @@ def Init():
         Parent.SendStreamMessage(msg)
     return
 
-
 # ---------------------------
 #   [Required] Execute Data / Process messages
 # ---------------------------
-
-
 def Execute(data):
     global sndCommandTrigger, triggerList, saveScriptLogs
     if data.IsChatMessage() and data.IsFromTwitch():
@@ -101,12 +96,9 @@ def Execute(data):
                 printLog(logMsg)
     return
 
-
 # ---------------------------
 #   [Required] Tick method (Gets called during every iteration even when there is no incoming data)
 # ---------------------------
-
-
 def Tick():
     global sfxQ, sfxDuration
     if len(sfxQ) > 0:
@@ -120,12 +112,9 @@ def Tick():
             sfxQ.popleft()
     return
 
-
 # ---------------------------
 #   [Optional] Parse method (Allows you to create your own custom $parameters)
 # ---------------------------
-
-
 def Parse(parseString, userid, username, targetid, targetname, message):
     if '$sendsounds' in parseString:
         parseString = parseString.lower()
@@ -141,35 +130,26 @@ def Parse(parseString, userid, username, targetid, targetname, message):
             return parseString.replace(regex.group(0), "")
     return parseString
 
-
 # ---------------------------
 #   [Optional] Reload Settings (Called when a user clicks the Save Settings button in the Chatbot UI)
 # ---------------------------
-
-
 def ReloadSettings():
     global scriptLogger
     scriptLogger.logEnd()
     Init()
     return
 
-
 # ---------------------------
 #   [Optional] Unload (Called when a user reloads their scripts or closes the bot / cleanup stuff)
 # ---------------------------
-
-
 def Unload():
     global scriptLogger
     scriptLogger.logEnd()
     return
 
-
 # ---------------------------
 #   [Optional] ScriptToggled (Notifies you when a user disables your script or enables it)
 # ---------------------------
-
-
 def ScriptToggled(state):
     global streamer
     if state:
@@ -181,17 +161,13 @@ def ScriptToggled(state):
     SendInfo(streamer, 'whisper', msg)
     return
 
-
 # ---------------------------
 #   Script Functions
 # ---------------------------
-
-
 def printLog(msg):
     global scriptLogger
     scriptLogger.logWrite(msg)
     return
-
 
 def RunCommand(user, command, *args):
     global sfxQ, streamer
@@ -206,7 +182,6 @@ def RunCommand(user, command, *args):
             PrintSoundList(user)
     return
 
-
 def SendInfo(user, mode, msg):
     if mode == 'whisper':
         Parent.SendStreamWhisper(user, msg)
@@ -217,7 +192,6 @@ def SendInfo(user, mode, msg):
         Parent.SendStreamWhisper(user, msg)
     return
 
-
 def SendAudioToOverlay(sfx):
     global payLoad
     index = triggerList.index(sfx)
@@ -227,7 +201,6 @@ def SendAudioToOverlay(sfx):
         "volume": (sndGlobalVolume * volumeList[index])/100
     }
     return payload
-
 
 def SendChat(sfx):
     index = triggerList.index(sfx)
@@ -246,7 +219,6 @@ def SendChat(sfx):
     Parent.SendStreamMessage(msg)
     return
 
-
 def PrintSoundList(user):
     msg = '/me : @{user} , those are the sounds you can pick from:'
     msg = msg.format(user=user)
@@ -262,7 +234,6 @@ def PrintSoundList(user):
     Parent.SendStreamMessage(msg)
     return
 
-
 def GetList():
     global triggerList
     msg = ''
@@ -275,52 +246,48 @@ def GetList():
         msg = msg[500:]
     return listToProcess
 
-
 # ---------------------------
 #   Streamlabs Chatbot GUI buttons functions
 # ---------------------------
-
-
 def OpenReadMe():
     ReadMe = 'https://github.com/vonschappler/SLCB-SendSounds#readme'
     os.startfile(ReadMe)
     return
 
 def OpenUserGuide():
-    Guide = 'https://github.com/vonschappler/SLCB-SendSounds/wiki/User-Guide'
+    Guide = 'https://github.com/vonschappler/SLCB-SendSounds/wiki'
     os.startfile(Guide)
     return
 
 def OpenGUI():
     global guiFile
-    command = 'python \"{file}"'.format(file=guiFile)
-    os.system(command)
+    try:
+        command = 'py -2 \"{file}"'.format(file=guiFile)
+        os.system(command)
+    except:
+        command = 'python \"{file}"'.format(file=guiFile)
+        os.system(command)
     return
-
 
 def OpenDiscord():
     Discord = "http://rebrand.ly/vonDiscord"
     os.startfile(Discord)
     return
 
-
 def OpenReleases():
     Release = "https://github.com/vonschappler/SLCB-SendSounds/releases"
     os.startfile(Release)
     return
-
 
 def OpenDonation():
     PayPal = 'https://rebrand.ly/vonPayPal'
     os.startfile(PayPal)
     return
 
-
 def OpenTwitch():
     Twitch = "http://rebrand.ly/vonTwitch"
     os.startfile(Twitch)
     return
-
 
 def OpenSite():
     os.startfile(Website)

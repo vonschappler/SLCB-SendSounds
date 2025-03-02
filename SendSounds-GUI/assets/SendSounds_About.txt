@@ -1,10 +1,9 @@
 # Overview:
 
-    1. Used programming languages and frameworks:
+    1. Used programming languages, libraries and frameworks:
 
         + Main script:
             - Python 2.7.13
-
         + Graphical User Interface (GUI):
             - Python 2.7.13
             - Tkinter (python framework for GUI design)
@@ -12,29 +11,20 @@
     2. Requirements:
 
         + StreamlabsChatbot 1.02.78 (or above)
-        
         + Python 2.7.13
-
         + Operational System(s):
             - Windows 10 (or above)
-        
         + Streaming platform:
             - Twitch (100% tested)
-        
         + Python packages / dependencies:
-            - mutagen 1.43.1 (required)
-            - pygame 2.0.3 (optional)
+            - pygame 2.0.3 (required)
         
     3. Basic funcionalities:
 
         + Creates automatic "sound effects commands", by making use of the original sound file (located in a defined folder) and a custom command trigger
-        
         + Adds usage counts of sounds, making it possible to view in the dashboard how many times each sound was used
-
         + Sends the sound effects to an overlay, "fax-enabling" the use of multiple audio channels inside Streamlabs Chatbot
-        
         + Uses sqlite3 databases instead of json, to improve command execution command speed
-        
         + Provides a group of additional commands to be used with the script
 
 ============================================================================================================
@@ -48,13 +38,11 @@
     - TODOs:
         + Find a way to make the database run faster when there are too many files / information stored on it
           It was verified that if too many files need to be added to the database or there are too many entries there, loading time of the script and dashboard can get slow
-
         + Add an option to delete entries from the database, in case those are not wanted anymore
           Currently, after some tests, deleting entries causes them to be re-inserted in the database whenever the script settings were saved.
 
     - Issues:
         + GUI start / update progress may be slow if too many files are added in the database
-        
         + OBS may break the sounds randomly
             - The reason for this is still being investigated to be sure this is being caused by the script and not by OBS itself.
 
@@ -62,29 +50,36 @@
 
 # Changelog:
 
-    1. Beta Releases:
+    1. Official releases:
+
+        + [SLCB] SendSounds v-1.0.0
+            - Added improved documentation
+            - Changed version numbering to match the current release
+            - Fixed the file SendSounds_About.txt
+                + Removal of unecessary listed dependency
+            - Code cleanup
+            - Updated brand on the top of the Dashboard Window
+            - Added in the user's guide links for dependencies download from their official resource URLs
+            - Added "self hosted" pygame dependency to the releases assets (Github) as we may risk this can not be available anymore in the future
+
+    2. Beta Releases:
 
         + [SLCB] SendSounds beta-2.0.1:
-            - Fixed an issue where triggers generated automatically were missing starting  "m" or "p" on their names
-        
+            - Fixed an issue where triggers generated automatically were missing starting "m" or "p" on their names
         + [SLCB] SendSounds beta-2.0.0:
             - General fixes for issues that prevented the script from running on the user machine
-                * Fixed an issue when checking for the optional dependecy **pygame** when the script is starting
-                * Fixed an issue where the script was not saving the selected folder correctly
-                * Fixed an issue that prevents some commands from being executed
-                * Fixed an issue that prevented log files management
-            - Updated the Dasboard GUI text for better compreension of what "datbase issues" mean
-            - Added the following functions / buttons to the Dashboard GUI:
-                * Enable disabled sound triggers
-                * Delete disabled sound triggers
-        
+                + Fixed an issue when checking for the dependency pygame when the script is starting
+                + Fixed an issue where the script was not saving the selected folder for the script settings correctly
+                + Fixed an issue that prevented some commands from being executed
+                + Fixed an issue that prevented log files management
+                + Updated the Dashboard GUI text for better comprehension of what "database issues" mean
+                + Added the following functions / buttons to the Dashboard GUI:
+                    [x] Enable disabled sound triggers
+                    [x] Delete disabled sound triggers
         + [SLCB] SendSounds beta-1.1.0:
-            - Fixed an issue where the script could conflict with other scripts which make reference to a sqlite database
-            - Added the buttons to the script GUI:
-                * Open User Guide
-                * Check fo Updates
-
+            - Changes to script related files to prevent conflicts with other scripts which require connection to sqlite databases
+            - Inclusion of two buttons on the script UI:
+                [x] Open User Guide
+                [x] Check for Updates
         + [SLCB] SendSounds beta-1.0.0:
             - Initial release for testing
-
-       

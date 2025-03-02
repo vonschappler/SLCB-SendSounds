@@ -2,7 +2,11 @@ try:
     import pygame
 except:
     pass
-import os, ttk, Tkinter as tk, tkFileDialog as dialog, SendSounds_Functions as fn
+import os
+import ttk
+import Tkinter as tk
+import tkFileDialog as dialog
+import SendSounds_Functions as fn
 
 global scriptSettings, settingsVars, soundVars, chatOptions, soundList, database, soundEditVars, pygameLoaded, passCheck, emtpyEntriesCheck
 
@@ -18,7 +22,6 @@ else:
     emtpyEntriesCheck = [0]
 soundList.insert(0, 'Select one...')
 
-
 def createTab(page):
     global settingsTab, fontOpts, variables, sfxOpts, passCheck, emtpyEntriesCheck, database, scriptSettings, soundList
     settingsTab = ttk.Frame(page)
@@ -29,7 +32,6 @@ def createTab(page):
     addCanvas(settingsTab)
     addHelp(settingsTab)
     return settingsTab
-
 
 def createVars():
     global settingsVars, soundVars, soundEditVars, scriptSettings, database
@@ -77,14 +79,12 @@ def createVars():
     soundVars.append(sndUsesCount)
     return [settingsVars, soundVars, soundEditVars]
 
-
 def configureTab(tab):
     tab.columnconfigure(0, weight=30)
     tab.columnconfigure(1, weight=0)
     tab.columnconfigure(2, weight=10)
     tab.rowconfigure(0, weight=10)
     return
-
 
 def addCanvas(tab):
     global settingsFrame
@@ -102,7 +102,6 @@ def addCanvas(tab):
     canvas.yview_moveto(0)
     return
 
-
 def addComponents(place):
     frame = tk.Frame(place, width=place.winfo_width())
     addScriptSettings(frame, 0)
@@ -110,7 +109,6 @@ def addComponents(place):
     addDBManager(frame, 2)
     addLogController(frame, 3)
     return frame
-
 
 def addScriptSettings(canvas, row):
     global globalSndFolder
@@ -120,10 +118,12 @@ def addScriptSettings(canvas, row):
     labelFrame.columnconfigure(0, weight=0)
     labelFrame.columnconfigure(1, weight=0)
     labelFrame.columnconfigure(2, weight=30)
+
     ttk.Label(labelFrame, text='Sounds/Commands custom trigger: ').grid(row=0, column=0, sticky=tk.E+tk.W, pady=[0, 5])
     globalCommandTrigger = ttk.Entry(labelFrame, name='soundsTrigger', textvariable=settingsVars[0], font=('Calibri', 12))
     globalCommandTrigger.grid(row=0, column=1, columnspan=2, sticky=tk.E+tk.W, ipadx=5, ipady=2, pady=[0, 5])
     globalCommandTrigger.focus_set()
+
     ttk.Label(labelFrame, text='Sounds folder: ').grid(row=1, column=0, sticky=tk.E+tk.W, pady=[0, 5])
     globalSndFolder = ttk.Entry(labelFrame, name='soundsFolder', textvariable=settingsVars[1], font=('Calibri', 12))
     globalSndFolder.grid(row=2, column=0, sticky=tk.E+tk.W, ipadx=5, ipady=2, pady=[0, 5])
@@ -131,85 +131,108 @@ def addScriptSettings(canvas, row):
     folderSelectButton = ttk.Button(labelFrame, text='Select a folder...', name='soundsFolderBtn')
     folderSelectButton.grid(row=2, column=2, sticky=tk.E+tk.W, pady=[0, 5])
     folderSelectButton.configure(command=selectFolder)
+
     ttk.Label(labelFrame, text='Global sound volume (overlay): ').grid(row=3, column=0, sticky=tk.E+tk.W, pady=[5, 0])
     globalSndVolumeLabel = ttk.Label(labelFrame, text='{vol}%'.format(vol=settingsVars[2].get()), anchor=tk.E)
     globalSndVolumeLabel.grid(row=3, column=1, pady=[5, 0], padx=[0, 10])
     globalSndVolumeScale = ttk.Scale(labelFrame, variable=settingsVars[2], from_=0, to=100, name='soundsVolume')
     globalSndVolumeScale.configure(command=lambda e,  label=globalSndVolumeLabel, var=settingsVars[2]: fn.setVolume(label, var))
     globalSndVolumeScale.grid(row=3, column=2, columnspan=2, sticky=tk.E+tk.W, ipadx=5, ipady=5, pady=[5, 0])
+
     scriptLogsCheck = ttk.Checkbutton(labelFrame, text='Save logs from Streamlabs Chatbot when running the script?                         ', name='saveScriptLogs', onvalue=True, offvalue=False, variable=settingsVars[3])
     scriptLogsCheck.grid(row=4, column=0, columnspan=3, pady=5, sticky=tk.E+tk.W)
+
     buttonsFrame = tk.Frame(labelFrame, width=labelFrame.winfo_width())
     buttonsFrame.grid(row=5, column=0, columnspan=3, sticky=tk.E+tk.W, pady=[5, 0])
     buttonsFrame.columnconfigure(0, weight=1)
     buttonsFrame.columnconfigure(1, weight=2)
     buttonsFrame.columnconfigure(2, weight=2)
+
     restoreBckBtn = ttk.Button(buttonsFrame, text='Restore backup', name='restoreBackBtn')
     restoreBckBtn.grid(row=0, column=0, sticky=tk.E+tk.W, padx=[0, 5])
     restoreBckBtn.config(command=lambda file=fn.scriptSettingsFile, cb=setSettings: fn.restoreFileBackup(file, cb))
+
     createBckBtn = ttk.Button(buttonsFrame, text='Create backup', name='createBackBtn')
     createBckBtn.grid(row=0, column=1, sticky=tk.E+tk.W, padx=[5, 5])
     createBckBtn.config(command=lambda file=fn.scriptSettingsFile: fn.createFileBackup(file))
+
     saveBtn = ttk.Button(buttonsFrame, text='Save settings', name='saveSettingsBtn')
     saveBtn.grid(row=0, column=2, sticky=tk.E+tk.W, padx=[5, 0])
     saveBtn.config(command=lambda file=fn.scriptSettingsFile, cb1=getScriptSettings, cb2=setSettings: fn.saveFile(file, cb1, cb2))
     return
 
-
 def addIndividualSoundSettings(canvas, row):
     global soundList, soundSelect, soundChat, soundTrigger, chatSelect, soundVolumeLabel, sndEnableCheck, soundUseCount, pygameLoaded
+
+    # Fix columns on the grid
+
     labelFrame = ttk.Labelframe(canvas, text=" Individual Sound Adjustments: ", takefocus=0)
     labelFrame.grid(row=row, column=0, sticky=tk.E+tk.W+tk.N+tk.S, padx=10, pady=10)
     labelFrame.config(border=1, relief=tk.SOLID)
     labelFrame.columnconfigure(3, weight=20)
     labelFrame.columnconfigure(4, weight=20)
+
     ttk.Label(labelFrame, text='Change settings for sound: ').grid(row=0, column=0, pady=[0, 5], sticky=tk.E+tk.W)
+
     refreshListBnt = ttk.Button(labelFrame, text='Refresh list', name='soundRefreshBtn')
     refreshListBnt.grid(row=0, column=1, padx=[0, 10], pady=[0, 5], sticky=tk.E+tk.W)
     refreshListBnt.configure(command=lambda db=database: updateList(db))
+
     soundSelect = ttk.Combobox(labelFrame, values=soundList, state='readonly', font=('Calibri', 12), textvar=soundVars[0], name='soundSelect')
     soundSelect.grid(row=0, column=2, sticky=tk.E+tk.W, pady=[0, 5], columnspan=3)
     soundSelect.current(0)
     soundSelect.bind('<<ComboboxSelected>>', lambda e, triggerSelector=soundSelect: selectSound(triggerSelector))
+
     ttk.Label(labelFrame, text='Sound trigger: ').grid(row=1, column=0, pady=[5, 5], sticky=tk.E+tk.W)
     soundTrigger = ttk.Entry(labelFrame, font=('Calibri', 12), textvariable=soundVars[1], name='soundTrigger')
-    soundTrigger.grid(row=1, column=1, sticky=tk.E+tk.W,pady=[5, 5], columnspan=4, ipadx=5, ipady=2)
+    soundTrigger.grid(row=1, column=1, sticky=tk.E+tk.W, pady=[5, 5], columnspan=4, ipadx=5, ipady=2)
+
     ttk.Label(labelFrame, text='Chat message sent with sound: ').grid(row=2, column=0, pady=[5, 5], sticky=tk.E+tk.W)
     soundChat = ttk.Entry(labelFrame, font=('Calibri', 12), textvariable=soundVars[4], name='soundChat')
     soundChat.grid(row=2, column=1, sticky=tk.E+tk.W, pady=[5, 5], columnspan=4, ipadx=5, ipady=2)
+
     ttk.Label(labelFrame, text='Send chat as: ').grid(row=3, column=0, pady=[5, 5], sticky=tk.E+tk.W)
     chatSelect = ttk.Combobox(labelFrame, values=chatOptions, state='readonly', font=('Calibri', 12), textvariable=soundVars[5], name='soundSendAs')
     chatSelect.grid(row=3, column=1, sticky=tk.E+tk.W, pady=[5, 5], columnspan=4)
     chatSelect.current(0)
+
     ttk.Label(labelFrame, text='Selected Sound volume: ').grid(row=4, column=0, sticky=tk.E+tk.W, pady=[5, 5])
+
     previewSnd = ttk.Button(labelFrame, text='Preview sound', name='soundPreviewBtn')
     previewSnd.grid(row=4, column=1, padx=[0, 10], pady=[5, 5], sticky=tk.E+tk.W)
     if pygameLoaded:
         previewSnd.configure(state='enabled')
     else:
         previewSnd.configure(state='disabled')
+
     previewSnd.configure(command=lambda sound=soundVars[2], vol=soundVars[3]: previewSound(sound, vol))
+
     soundVolumeLabel = ttk.Label(labelFrame, text='{vol}%'.format(vol=soundVars[3].get()), anchor=tk.E)
     soundVolumeLabel.grid(row=4, column=2, pady=[5, 5], padx=[10, 5])
+
     soundVolumeScale = ttk.Scale(labelFrame, variable=soundVars[3], from_=0, to=100, name='soundVolume')
     soundVolumeScale.configure(command=lambda e,  label=soundVolumeLabel, var=soundVars[3]: fn.setVolume(label, var))
     soundVolumeScale.grid(row=4, column=3, sticky=tk.E+tk.W, ipadx=5, ipady=5, pady=[5, 5], columnspan=2)
+
     sndEnableCheck = ttk.Checkbutton(labelFrame, text='Enable the use of this sound on stream?', onvalue=1, offvalue=0, variable=soundVars[6], name='soundEnable')
     sndEnableCheck.grid(row=5, column=0, columnspan=5, sticky=tk.E+tk.W)
+
     soundStats = ttk.LabelFrame(labelFrame, text=' Statistics for selected sound: ')
     soundStats.grid(row=6, sticky=tk.E+tk.W, pady=[0, 10], columnspan=5)
     soundStats.config(border=1, relief=tk.SOLID)
     soundUseCount = ttk.Label(soundStats, text='Total use count: {count}'.format(count=soundVars[7].get()))
     soundUseCount.grid(row=0, column=0)
+
     ttk.Separator(labelFrame).grid(row=7, column=0, sticky=tk.E+tk.W, columnspan=5)
+
     saveChangesBtn = ttk.Button(labelFrame, text='Save changes', name="soundSaveBtn")
     saveChangesBtn.grid(row=8, column=0, pady=[10, 0], padx=[0, 5], sticky=tk.E+tk.W, columnspan=2)
     saveChangesBtn.configure(command=lambda mode='change': updateSoundSettings(mode))
+
     cancelChangesBtn = ttk.Button(labelFrame, text='Ignore changes', name='soundCancelBtn')
     cancelChangesBtn.grid(row=8, column=2, pady=[10, 0], padx=[5, 5], sticky=tk.E+tk.W, columnspan=3)
     cancelChangesBtn.configure(command=lambda current=soundSelect: selectSound(current))
     return
-
 
 def addDBManager(canvas, row):
     global passCheck, integrityCheckMsg, fixDatabaseDisable, fixDatabaseDelete, emptyEntriesMsg, clearDatabase, enableDatabase
@@ -218,14 +241,18 @@ def addDBManager(canvas, row):
     labelFrame.config(border=1, relief=tk.SOLID)
     labelFrame.columnconfigure(0, weight=10)
     labelFrame.columnconfigure(1, weight=10)
+
     integrityCheckMsg = ttk.Label(labelFrame)
     integrityCheckMsg.grid(row=0, column=0, columnspan=2, sticky=tk.E+tk.W)
+
     fixDatabaseDisable = ttk.Button(labelFrame, text='Disable entries / triggers', name='fixDisableBtn')
     fixDatabaseDisable.grid(row=1, column=0, sticky=tk.E+tk.W, padx=[0, 5])
     fixDatabaseDisable.configure(command=lambda mode='disable', cb=fullRecheck: fn.dbIssueFix(mode, cb))
+
     fixDatabaseDelete = ttk.Button(labelFrame, text='Delete entries / triggers', name="fixDeleteBtn")
     fixDatabaseDelete.grid(row=1, column=1, sticky=tk.E+tk.W, padx=[5, 0], pady=[0, 5])
     fixDatabaseDelete.configure(command=lambda mode='delete', cb=fullRecheck: fn.dbIssueFix(mode, cb))
+
     if passCheck[0]:
         integrityCheckMsg['text'] = 'All triggers have a sound file located in the selected folder'
         fixDatabaseDisable.configure(state='disabled')
@@ -235,15 +262,18 @@ def addDBManager(canvas, row):
         integrityCheckMsg['text'] = text.format(issuesCount=passCheck[1])
         fixDatabaseDisable.configure(state='enabled')
         fixDatabaseDelete.configure(state='enabled')
-    ttk.Separator(labelFrame).grid(row=3, column=0,columnspan=2, sticky=tk.E+tk.W, pady=5)
+    ttk.Separator(labelFrame).grid(row=3, column=0, columnspan=2, sticky=tk.E+tk.W, pady=5)
+
     emptyEntriesMsg = ttk.Label(labelFrame)
     emptyEntriesMsg.grid(row=4, column=0, columnspan=2, sticky=tk.E+tk.W)
+
     enableDatabase = ttk.Button(labelFrame, text='Enable disabled sound triggers', name="enableTriggersBtn")
-    enableDatabase.grid(row=5, column=0,sticky=tk.E+tk.W, pady=[5, 0], padx=[0, 5])
+    enableDatabase.grid(row=5, column=0, sticky=tk.E+tk.W, pady=[5, 0], padx=[0, 5])
     enableDatabase.configure(command=lambda mode='enable', cb=fullRecheck: fn.dbClear(mode, cb))
     clearDatabase = ttk.Button(labelFrame, text='Delete disabled sound triggers', name="deleteTriggersBtn")
     clearDatabase.grid(row=5, column=1, sticky=tk.E+tk.W, pady=[5, 0], padx=[5, 0])
     clearDatabase.configure(command=lambda mode='delete', cb=fullRecheck: fn.dbClear(mode, cb))
+
     if emtpyEntriesCheck > 0:
         text = 'Some disabled entries can be deleted from / enabled on your database.\nTotal entries which can be deleted / enabled: {count}'
         emptyEntriesMsg['text'] = text.format(count=emtpyEntriesCheck)
@@ -255,32 +285,37 @@ def addDBManager(canvas, row):
         clearDatabase.configure(state='disabled')
     return
 
-
 def addLogController(canvas, row):
     labelFrame = ttk.Labelframe(canvas, text=" Logs Controller: ", takefocus=0)
     labelFrame.grid(row=row, column=0, sticky=tk.E+tk.W+tk.N+tk.S, padx=10, pady=10)
     labelFrame.config(border=1, relief=tk.SOLID)
     labelFrame.columnconfigure(0, weight=0)
     labelFrame.columnconfigure(1, weight=10)
+
     openDashboardLogs = ttk.Button(labelFrame, text='Open Dashboard Logs Folder', name='logDashOpen')
     openDashboardLogs.grid(row=0, column=0, sticky=tk.E+tk.W+tk.N+tk.S, padx=[0, 5], pady=5)
     openDashboardLogs.configure(command=fn.openDashboardLogs)
+
     deleteDashboardLogs = ttk.Button(labelFrame, text='Delete Dashboard Logs', name="logDashDelete")
     deleteDashboardLogs.grid(row=0, column=1, sticky=tk.E+tk.W+tk.N+tk.S, padx=[5, 0], pady=5)
     deleteDashboardLogs.configure(command=fn.deleteDashboardLogs)
+
     ttk.Separator(labelFrame).grid(row=1, column=0, columnspan=2, sticky=tk.E+tk.W, pady=5)
+
     openScriptLogs = ttk.Button(labelFrame, text='Open Script Logs Folder', name='logScriptOpen')
     openScriptLogs.grid(row=2, column=0, sticky=tk.E+tk.W+tk.N+tk.S, padx=[0, 5], pady=5)
     openScriptLogs.configure(command=fn.openScriptLogs)
+
     deleteScriptLogs = ttk.Button(labelFrame, text='Delete Script Logs', name='logScriptDelete')
     deleteScriptLogs.grid(row=2, column=1, sticky=tk.E+tk.W+tk.N+tk.S, padx=[5, 0], pady=5)
     deleteScriptLogs.configure(command=fn.deleteScriptLogs)
-    ttk.Separator(labelFrame).grid(row=3, column=0,columnspan=2, sticky=tk.E+tk.W, pady=5)
+
+    ttk.Separator(labelFrame).grid(row=3, column=0, columnspan=2, sticky=tk.E+tk.W, pady=5)
+
     deleteAllLogs = ttk.Button(labelFrame, text='Delete All Log files', name='logDeleteAll')
-    deleteAllLogs.grid(row=4, column=0, sticky=tk.E+tk.W +tk.N+tk.S, pady=[5, 10], columnspan=2)
+    deleteAllLogs.grid(row=4, column=0, sticky=tk.E+tk.W+tk.N+tk.S, pady=[5, 10], columnspan=2)
     deleteAllLogs.configure(command=fn.deleteAllLogs)
     return
-
 
 def addHelp(tab):
     global tabHelpText
@@ -296,7 +331,6 @@ def addHelp(tab):
     tabHelpText['yscrollcommand'] = scrollY.set
     return tabHelpText
 
-
 # Tab specific functions
 def setSettings():
     global scriptSettings, passCheck, emtpyEntriesCheck, settingsVars, database, globalSndFolder
@@ -309,14 +343,12 @@ def setSettings():
     fullRecheck()
     return database
 
-
 def fullRecheck():
     global database
     recheckIntegrity()
     recheckMissingFiles()
     updateList(database)
     return
-
 
 def getScriptSettings():
     global database, settingsVars
@@ -328,7 +360,6 @@ def getScriptSettings():
     }
     return data
 
-
 def selectFolder():
     global globalSndFolder, newDir, settingsVars
     newDir = dialog.askdirectory()
@@ -337,7 +368,6 @@ def selectFolder():
         globalSndFolder.delete(0, tk.END)
         globalSndFolder.insert(tk.END, newDir.lower().replace('\\', '/'))
     return newDir
-
 
 def selectSound(triggerSelector):
     global soundChat
@@ -362,7 +392,6 @@ def selectSound(triggerSelector):
     fn.printLog(msg)
     return soundVars
 
-
 def previewSound(sound, volSetter):
     soundFile = sound.get()
     vol = volSetter.get()
@@ -386,14 +415,12 @@ def previewSound(sound, volSetter):
     fn.printLog(msg)
     return
 
-
 def updateSoundSettings(*args):
     global soundSelect, soundTrigger, chatSelect, soundChat, soundVolumeLabel, soundUseCount, sndEnableCheck
     if not args:
         chatSelect.set(soundVars[5].get())
         soundVolumeLabel['text'] = '{vol:.0f}%'.format(vol=soundVars[3].get())
-        soundUseCount['text'] = 'Total use count: {count}'.format(
-            count=soundVars[7].get())
+        soundUseCount['text'] = 'Total use count: {count}'.format(count=soundVars[7].get())
     elif args[0] == 'change':
         data = []
         for var in soundVars:
@@ -416,10 +443,8 @@ def updateSoundSettings(*args):
         soundSelect.current(0)
         chatSelect.current(soundVars[5].get())
         soundVolumeLabel['text'] = '{vol:.0f}%'.format(vol=soundVars[3].get())
-        soundUseCount['text'] = 'Total use count: {count}'.format(
-            count=soundVars[7].get())
+        soundUseCount['text'] = 'Total use count: {count}'.format(count=soundVars[7].get())
     return soundVars
-
 
 def checkPygame():
     global pygameLoaded
@@ -439,7 +464,6 @@ def checkPygame():
         pass
     return
 
-
 def updateList(db):
     global soundList, soundSelect
     soundSelect['values'] = []
@@ -447,7 +471,6 @@ def updateList(db):
     soundList.insert(0, 'Select one')
     soundSelect['values'] = soundList
     return soundList
-
 
 def recheckIntegrity():
     global integrityCheckMsg, fixDatabaseDisable, fixDatabaseDelete
@@ -462,7 +485,6 @@ def recheckIntegrity():
         fixDatabaseDisable.configure(state='enabled')
         fixDatabaseDelete.configure(state='enabled')
     return
-
 
 def recheckMissingFiles():
     global emptyEntriesMsg, clearDatabase, enableDatabase

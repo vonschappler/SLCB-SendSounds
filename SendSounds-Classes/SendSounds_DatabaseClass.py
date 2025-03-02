@@ -1,10 +1,12 @@
-import sqlite3, json, codecs, os
+import sqlite3
+import json
+import codecs
+import os
 from collections import OrderedDict as od
 from SendSounds_LoggerClass import Logger as log
 
 global databaseLog, table, cListTrigger, cTrigger, cFilePath, cMessage, cSendAs, cVolume, cEnable, cUsesCount, cPassIntegrity, cIntegrityFixed
 databaseLog = log('dashboard')
-
 
 class Database():
     def __init__(self, dbSettingsFile=None, scriptSettingsFile=None):
@@ -19,13 +21,13 @@ class Database():
                 self.startMsg += '\n[{time}] (INF) - Required asset "SendSounds_dbSettings.json" file found!'
             with codecs.open(scriptSettingsFile, encoding='utf-8-sig', mode='r') as f:
                 self.scriptSettings = json.load(f, encoding='utf-8', object_pairs_hook=od)
-                self.soundsFolder = self.scriptSettings['sndFolderSFX'].lower()
                 self.startMsg += '\n[{time}] (INF) - Required asset "SendSounds_Settings.json" file found!'
             self.dbFolder = self.dbSettings['dbFolder']
             self.dbFilePath = os.path.realpath(os.path.join(os.path.dirname(__file__), '../{folder}')).format(folder=self.dbFolder)
             self.dbFileName = self.dbSettings['dbFileName']
             self.dbColumns = self.dbSettings['dbColumns']
             self.dbTable = self.dbSettings['dbTable']
+            self.soundsFolder = self.scriptSettings['sndFolderSFX'].lower()
             e = None
         except Exception as e:
             self.startMsg += '\n[{time}] (WAR) - Unable to find one or more required assets or the required files are not in the right format. The script is creating a new files.'
@@ -34,28 +36,29 @@ class Database():
             self.dbFileName = 'SendSounds_Database.sqlite'
             self.dbFilePath = os.path.realpath(os.path.join(os.path.dirname(__file__), '../{folder}')).format(folder=self.dbFolder)
             self.dbColumns = [
-                "sndListTrigger", 
-                "sndTrigger", 
-                "sndFilePath", 
-                "sndVolume", 
-                "sndSendMsg", 
-                "sndSendAs", 
-                "sndEnable", 
-                "sndUsesCount", 
-                "passIntegrity", 
+                "sndListTrigger",
+                "sndTrigger",
+                "sndFilePath",
+                "sndVolume",
+                "sndSendMsg",
+                "sndSendAs",
+                "sndEnable",
+                "sndUsesCount",
+                "passIntegrity",
                 "integrityFixed"
             ]
             self.dbTable = 'soundsSettings'
-            self.soundsFolder = os.path.realpath(os.path.join(os.path.dirname(__file__), '../SendSounds-Sounds'))
-            with codecs.open(os.path.realpath(os.path.join(os.path.dirname(__file__), 'SendSounds_dbSettings.json')), mode='w+', encoding='utf=8=sig') as f:
+            self.soundsFolder = os.path.realpath(os.path.join(
+                os.path.dirname(__file__), '../SendSounds-Sounds'))
+            with codecs.open(os.path.realpath(os.path.join(os.path.dirname(__file__), 'SendSounds_dbSettings.json')), mode='w+', encoding='utf-8-sig') as f:
                 settings = {
-                    "dbColumns": self.dbColumns, 
-                    "dbFileName": self.dbFileName, 
-                    "dbFolder": self.dbFolder, 
+                    "dbColumns": self.dbColumns,
+                    "dbFileName": self.dbFileName,
+                    "dbFolder": self.dbFolder,
                     "dbTable": self.dbTable
                 }
                 json.dump(settings, f, ensure_ascii=False, indent=2)
-                self.startMsg += '\n[{time}] (SUC) - Required asset "dbSettings.json" file created with success!'
+                self.startMsg += '\n[{time}] (SUC) - Required asset "SendSounds_dbSettings.json" file created with success!'
             pass
         self.startMsg += '\n[{time}] (SUC) - Database initialized with success!'
         self.startMsg = self.startMsg.format(time=databaseLog.getTime(), err=e)
@@ -178,10 +181,10 @@ class Database():
         soundsFileList = os.listdir(folder)
         for result in results:
             try:
-                fileToCheck = os.path.realpath(result[0]).lower()
+                fileToCheck = os.path.realpath(result[0])
                 fileName = fileToCheck.split('\\')[-1:][0]
                 if fileName in soundsFileList:
-                    compareFile = os.path.realpath(os.path.join(folder, fileName)).lower()
+                    compareFile = os.path.realpath(os.path.join(folder, fileName))
                 else:
                     compareFile = None
                 if (fileToCheck != compareFile):
@@ -202,6 +205,9 @@ class Database():
                     self.passed += 1
                 e = None
             except Exception as e:
+                msg +='\n[{time}] (ERR) - An error has happened while checking the database integrity...'
+                msg +='\n[{time}] (ERR) - System message: {err}'
+                msg = msg.format(time=databaseLog.getTime(), err=e, folder=None)
                 pass
         msg += '\n[{time}] (SUC) - Database integrity check completed...'
         msg += '\n[{time}] (INF) - Entries passed the check: {passed} / Entries rejected in the check: {notPassed}'
@@ -212,6 +218,7 @@ class Database():
             for entry in self.toFixList:
                 msg += '\n[{time}] (INF) - {entry}'.format(time=databaseLog.getTime(), entry=entry)
         msg = msg.format(time=databaseLog.getTime(), passed=self.passed, notPassed=self.notPassed, folder=folder)
+        conn.commit()
         conn.close()
         return [msg, self.hasPassed, self.notPassed]
 

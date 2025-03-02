@@ -1,3 +1,4 @@
+// @ts-nocheck
 let evt = new Event('click');
 
 $(document).ready(function () {
@@ -25,19 +26,23 @@ $(document).ready(function () {
 
 function connectWebsocket() {
   var socket = new WebSocket('ws:127.0.0.1:3337/streamlabs');
+
   socket.onopen = function (message) {
     var auth = {
-      author: 'von_Schappler',
+      author: 'von Schappler',
       website: 'http://rebrand.ly/vonWebsite',
       api_key: API_Key,
       events: ['EVENT_SENDSOUNDS'],
     };
+
     socket.send(JSON.stringify(auth));
   };
+
   socket.onclose = function () {
     socket = null;
     setTimeout(connecWebsocket, 10000);
   };
+
   socket.onmessage = function (message) {
     console.log(message);
     var msg = JSON.parse(message.data);

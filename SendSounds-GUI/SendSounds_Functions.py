@@ -1,6 +1,11 @@
-import json, codecs, os, sys, Tkinter as tk, SendSounds_Theme
-sys.path.append(os.path.join(os.path.dirname(__file__), '../SendSounds-Classes'))
 from shutil import copy
+import json
+import codecs
+import os
+import sys
+import Tkinter as tk
+import SendSounds_Theme
+sys.path.append(os.path.join(os.path.dirname(__file__), '../SendSounds-Classes'))
 from SendSounds_DatabaseClass import Database as db
 from SendSounds_LoggerClass import Logger as log
 
@@ -11,13 +16,11 @@ dbSettingsFile = os.path.realpath(os.path.join(os.path.dirname(__file__), '../Se
 scriptSettingsFile = os.path.realpath(os.path.join(os.path.dirname(__file__), '../SendSounds_Settings.json'))
 helpFile = os.path.realpath(os.path.join(os.path.dirname(__file__), 'assets/SendSounds_Help.json'))
 
-
 def printLog(msg):
     print(msg)
     if dbLogger:
         dbLogger.logWrite(msg)
     return
-
 
 def initDb():
     global soundsDB
@@ -25,7 +28,6 @@ def initDb():
     startDBMsg = soundsDB.createTable()
     printLog(startDBMsg)
     return soundsDB
-
 
 def createSettings(data, file):
     global dbLogger
@@ -41,7 +43,6 @@ def createSettings(data, file):
     msg = msg.format(time=dbLogger.getTime(), file=file, err=e)
     printLog(msg)
     return
-
 
 def saveFile(filename, cb1, cb2):
     global dbLogger, soundsDB, scriptSettingsFile
@@ -60,7 +61,6 @@ def saveFile(filename, cb1, cb2):
     cb2()
     return soundsDB
 
-
 def createFileBackup(fileName):
     global dbLogger
     backFileName = '{file}.bk'.format(file=fileName)
@@ -75,7 +75,6 @@ def createFileBackup(fileName):
     msg = msg.format(file=fileName, backup=backFileName, err=e, time=dbLogger.getTime())
     printLog(msg)
     return
-
 
 def restoreFileBackup(fileName, cb):
     global dbLogger, soundsDB, scriptSettingsFile
@@ -93,7 +92,6 @@ def restoreFileBackup(fileName, cb):
     printLog(msg)
     return soundsDB
 
-
 def readJson(jsonFile):
     global dbLogger
     try:
@@ -110,7 +108,6 @@ def readJson(jsonFile):
     printLog(msg)
     return jsonData
 
-
 def changeTabStatus(tab, bar, *args):
     global dbLogger
     tabIndex = tab.index(tab.select())
@@ -122,45 +119,37 @@ def changeTabStatus(tab, bar, *args):
     printLog(msg)
     return
 
-
 def openDashboardLogs():
     folder = os.path.realpath(os.path.join(os.path.dirname(__file__), '../SendSounds-Logs/Dashboard'))
     os.startfile(folder)
     return
 
-
 def deleteDashboardLogs():
     dbLogger.folderLogDelete('dashboard')
     return
-
 
 def openScriptLogs():
     folder = os.path.realpath(os.path.join(os.path.dirname(__file__), '../SendSounds-Logs/Script'))
     os.startfile(folder)
     return
 
-
 def deleteScriptLogs():
     dbLogger.folderLogDelete('script')
     return
-
 
 def openLogs():
     folder = os.path.realpath(os.path.join(os.path.dirname(__file__), '../SendSounds-Logs'))
     os.startfile(folder)
     return
 
-
 def deleteAllLogs():
     deleteDashboardLogs()
     deleteScriptLogs()
     return
 
-
 def setVolume(label, var, *args):
     label['text'] = '{:.0f}%'.format(var.get())
     return var.get()
-
 
 def getTriggers(db):
     msg = '[{time}] (INF) - Creating list of triggers...'
@@ -178,20 +167,17 @@ def getTriggers(db):
     printLog(msg)
     return list
 
-
 def updateSound(index, data):
     global soundsDB
     msg = soundsDB.updateSound(index, data)
     printLog(msg)
     return
 
-
 def deleteSound(index):
     global soundsDB
     msg = soundsDB.deleteSound(index)
     printLog(msg)
     return
-
 
 def checkIntegrity():
     check = soundsDB.checkIntegrity()
@@ -201,19 +187,16 @@ def checkIntegrity():
     printLog(msg)
     return [hasPassed, issueCount]
 
-
 def unselect(root, *args):
     widget = root.tk_focusPrev()
     widget.selection_clear()
     return
-
 
 def dbIssueFix(mode, cb):
     msg = soundsDB.fixIntegrity(mode)
     cb()
     printLog(msg)
     return
-
 
 def dbClear(*args):
     if args and len(args) == 2:
@@ -226,14 +209,11 @@ def dbClear(*args):
     printLog(msg)
     return toClear
 
-
 def dbDisconnect():
     soundsDB.conn.close()
     return
 
-
 helpText = readJson(helpFile)
-
 
 def changeHelp(e, root, textZone, *args):
     try:

@@ -1,16 +1,19 @@
-import SendSounds_Theme, Tkinter as tk, SendSounds_Settings, SendSounds_About, ttk, SendSounds_Functions as fn, os
+import SendSounds_Theme
+import Tkinter as tk
+import SendSounds_Settings
+import SendSounds_About
+import ttk
+import SendSounds_Functions as fn
+import os
 
-global scriptName, version, icofile, runAs
+global scriptName, version, icofile
 scriptName = fn.dbLogger.scriptName
 version = fn.dbLogger.version
 icoFile = os.path.realpath(os.path.join(os.path.dirname(__file__), 'assets/icon.ico'))
 
-
 #
 #   Dashboard Settings
 #
-
-
 def Init():
     global root, style, mainFrame
     root = tk.Tk()
@@ -59,7 +62,7 @@ def Init():
 Init()
 
 # Tab styling to fit window
-style.configure('TNotebook.Tab',width=root.winfo_screenwidth()/len(mainFrame.tabs()))
+style.configure('TNotebook.Tab', width=root.winfo_screenwidth()/len(mainFrame.tabs()))
 
 root.mainloop()
 fn.dbLogger.logEnd()
