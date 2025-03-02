@@ -45,6 +45,7 @@ A full guide on how to use the script can be found on [the script wiki](https://
 </summary>
 
 ![Image 01 - Interface Streamlabs Chatbot](images/Preview_SLCB.png)
+
 </details>
 
 <details>
@@ -55,14 +56,32 @@ A full guide on how to use the script can be found on [the script wiki](https://
 </summary>
 
 ![Image 02 - Preview Dashboard](images/Preview_Dash.png)
+
 </details>
 
 ## Changelog:
 
+- [version v-1.0.1](https://github.com/vonschappler/SLCB-SendSounds/releases/tag/v-1.0.1):
+
+  - Added virtual click event to overlay, to prevent OBS from playing the sounds, prior to last OBS updates
+
+- [version v-1.0.0](https://github.com/vonschappler/SLCB-SendSounds/releases/tag/v-1.0.0):
+
+  - Added improved documentation
+  - Changed version numbering to match the current release
+  - Fixed the file SendSounds_About.txt
+    - Removal of unecessary listed dependency
+  - Code cleanup
+  - Updated brand on the top of the Dashboard Window
+  - Added in the user's guide links for dependencies download from their official resource URLs
+  - Added "self hosted" pygame dependency to the releases assets (Github) as we may risk this can not be available anymore in the future
+
 - [Version beta-2.0.1](https://github.com/vonschappler/SLCB-SendSounds/releases/tag/beta-2.0.1):
-  - Fixed an issue where triggers generated automatically were missing starting  "m" or "p" on their names
+
+  - Fixed an issue where triggers generated automatically were missing starting "m" or "p" on their names
 
 - [Version beta-2.0.0](https://github.com/vonschappler/SLCB-SendSounds/releases/tag/beta-2.0.0):
+
   - General fixes for issues that prevented the script from running on the user machine
     - Fixed an issue when checking for the optional dependecy **pygame** when the script is starting
     - Fixed an issue where the script was not saving the selected folder for the script settings correctly
@@ -74,6 +93,7 @@ A full guide on how to use the script can be found on [the script wiki](https://
     - Delete disabled sound triggers
 
 - [Version beta-1.1.0](https://github.com/vonschappler/SLCB-SendSounds/releases/tag/beta-1.1.0):
+
   - Fixed an issue where the script could conflict with other scripts which make reference to a sqlite database
   - Added the buttons:
     - Open User Guide
@@ -111,7 +131,6 @@ A full guide on how to use the script can be found on [the script wiki](https://
      - The cause of this is being ivestigated and if it's found that the issue is caused by the script it self, a fix for it will be released in future patches.
   </details>
 
-  
 </details>
 
 <details open>
